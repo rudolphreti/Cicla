@@ -13,13 +13,18 @@ module.exports = {
       template: './src/index.html',
     }),
     new CopyPlugin({
-      patterns: [
-        { from: 'src/assets', to: 'assets' },
-      ],
+      patterns: [{ from: 'src/assets', to: 'assets' }],
     }),
   ],
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        },
+      },
       {
         test: /\.ts$/,
         use: 'ts-loader',
@@ -29,10 +34,10 @@ module.exports = {
         test: /\.scss$/,
         use: [
           'style-loader', // injects CSS to the DOM by injecting a <style> tag
-          'css-loader',   // translates CSS into CommonJS modules
-          'sass-loader'   // compiles Sass to CSS
-        ]
-      }
+          'css-loader', // translates CSS into CommonJS modules
+          'sass-loader', // compiles Sass to CSS
+        ],
+      },
     ],
   },
   resolve: {
