@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "build:ts": "tsc"
+    "build:ts": "tsc",
+    "deploy": "npm run build && cp -r dist/* . && git add . && git commit -m 'Deploy to GitHub Pages' && git push origin master"
   },
   "keywords": [],
   "author": "",
