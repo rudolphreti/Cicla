@@ -98,3 +98,6 @@ window.addEventListener('load', function () {
 window.shuffleKeyChars = shuffleKeyChars;
 window.encryptMessage = encryptMessage;    // Corrected spelling
 window.decryptMessage = decryptMessage;    // Corrected spelling
+
+console.log("Script loaded successfully, and functions attached to window: ", window.encryptMessage, window.decryptMessage);
+
