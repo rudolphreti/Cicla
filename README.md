@@ -1,6 +1,6 @@
 ﻿# Cicla - Application for Encrypting with a Key
 
-[![Cicla Logo](screen.png)](https://srv19859.microhost.com.pl/cicla/index.html)
+[![Cicla Logo](screen.png)](https://rudolphreti.github.io/Cicla/)
 
 ## Description
 Cicla is a free application for generating ciphers that cannot be cracked without the key. The app enables both encryption and decryption of messages using a specially prepared key.
@@ -13,7 +13,7 @@ Cicla is a free application for generating ciphers that cannot be cracked withou
 5. To decrypt the message, click "Decrypt this message".
 6. The decrypted message will appear in the "Message decrypted" field.
 
-[DEMO](https://srv19859.microhost.com.pl/cicla/index.html)
+[DEMO](https://rudolphreti.github.io/Cicla/)
 
 ## Technologies
 The project was built using the following technologies: Node.js, Typescript, SCSS, WebPack, Babel.js.
