@@ -1,11 +1,20 @@
-// Rozszerzenie interfejsu Window o nasze funkcje
-interface Window {
-  shuffleKeyChars: () => void;
-  encrypteMessage: () => void;
-  decrypteMessage: () => void;
+import './styles.scss';
+
+// Extend the Window interface globally
+declare global {
+  interface Window {
+    shuffleKeyChars: () => void;
+    encryptMessage: () => void;    // Corrected spelling
+    decryptMessage: () => void;    // Corrected spelling
+  }
+}
+declare global {
+  interface String {
+    shuffle(): string;
+  }
 }
 
-// Rozszerzenie prototypu String o metodę shuffle
+// Extend the String prototype with a shuffle method
 interface String {
   shuffle: () => string;
 }
@@ -23,24 +32,21 @@ String.prototype.shuffle = function (): string {
   return a.join('');
 };
 
-// Funkcja do przemieszania znaków klucza
+// Function to shuffle key characters
 const shuffleKeyChars = (): void => {
-  const keyCharsSchufled = document.getElementById('key') as HTMLInputElement;
-  keyCharsSchufled.value = keyCharsSchufled.value.shuffle();
+  const keyCharsShuffled = document.getElementById('key') as HTMLInputElement;
+  keyCharsShuffled.value = keyCharsShuffled.value.shuffle();
 };
 
-// Funkcja do szyfrowania wiadomości
-const encrypteMessage = (): void => {
+// Function to encrypt a message
+const encryptMessage = (): void => {  // Corrected spelling
   let message = (document.getElementById('message') as HTMLInputElement).value;
   let messageSplit = message.split('');
   let key = (document.getElementById('key') as HTMLInputElement).value;
   let keySplit = key.split('');
-
-  // Usuwanie duplikatów
   let messageCharSet = Array.from(new Set(messageSplit));
-  console.log(messageCharSet);
   let keyCharSet = Array.from(new Set(keySplit));
-  console.log(keyCharSet);
+
   messageCharSet.forEach((mel) => {
     if (!keyCharSet.includes(mel)) {
       console.log(`There is no "${mel}" in key!`);
@@ -57,15 +63,12 @@ const encrypteMessage = (): void => {
       }
     });
   });
-  (document.getElementById('message-encrypted') as HTMLInputElement).value =
-    messageEncrypted.join(',');
+  (document.getElementById('message-encrypted') as HTMLInputElement).value = messageEncrypted.join(',');
 };
 
-// Funkcja do deszyfrowania wiadomości
-const decrypteMessage = (): void => {
-  let messageEncrypted = (
-    document.getElementById('message-encrypted') as HTMLInputElement
-  ).value.split(',');
+// Function to decrypt a message
+const decryptMessage = (): void => {  // Corrected spelling
+  let messageEncrypted = (document.getElementById('message-encrypted') as HTMLInputElement).value.split(',');
   let key = (document.getElementById('key') as HTMLInputElement).value;
   let keySplit = key.split('');
   let messageDecrypted = '';
@@ -74,32 +77,24 @@ const decrypteMessage = (): void => {
     messageDecrypted += key[parseInt(mel)];
   });
 
-  (document.getElementById('message-decrypted') as HTMLInputElement).innerText =
-    messageDecrypted;
-  (
-    document.getElementById('message-decrypted-title') as HTMLElement
-  ).style.display = 'flex';
-  (document.getElementById('message-decrypted') as HTMLElement).style.display =
-    'flex';
+  (document.getElementById('message-decrypted') as HTMLInputElement).innerText = messageDecrypted;
+  (document.getElementById('message-decrypted-title') as HTMLElement).style.display = 'flex';
+  (document.getElementById('message-decrypted') as HTMLElement).style.display = 'flex';
 };
 
-// Obsługa zdarzeń na stronie
+// Event listeners
 window.addEventListener('load', function () {
   const input = document.getElementById('key') as HTMLInputElement;
 
   input.addEventListener('click', function () {
-    (document.getElementById('caret-position') as HTMLElement).innerHTML =
-      'Caret position: ' + this.selectionStart;
+    (document.getElementById('caret-position') as HTMLElement).innerHTML = 'Caret position: ' + this.selectionStart;
   });
   input.addEventListener('keyup', function () {
-    (document.getElementById('caret-position') as HTMLElement).innerHTML =
-      'Caret position: ' + this.selectionStart;
+    (document.getElementById('caret-position') as HTMLElement).innerHTML = 'Caret position: ' + this.selectionStart;
   });
 });
 
-
-
-// Przypisanie funkcji do obiektu window
+// Assign functions to the window object
 window.shuffleKeyChars = shuffleKeyChars;
-window.encrypteMessage = encrypteMessage;
-window.decrypteMessage = decrypteMessage;
+window.encryptMessage = encryptMessage;    // Corrected spelling
+window.decryptMessage = decryptMessage;    // Corrected spelling
