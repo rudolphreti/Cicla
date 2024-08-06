@@ -1,5 +1,6 @@
 # Ignoruj folder node_modules
 node_modules/
+dist/
 
 # Ignoruj plik środowiskowy
 .env
@@ -10,3 +11,4 @@ node_modules/
 # Ignoruj pliki systemowe
 .DS_Store
 Thumbs.db
+
