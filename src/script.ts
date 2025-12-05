@@ -54,7 +54,7 @@ const renderCells = (values: string[], columns: number, render: (value: string, 
     )
     .join('');
 
-const createKeyTableMarkup = (key: string, columns = 25): string => {
+const createKeyTableMarkup = (key: string, columns = 20): string => {
   const keyChars = key.split('');
 
   return chunkArray(keyChars, columns)
@@ -79,14 +79,14 @@ const createKeyTableMarkup = (key: string, columns = 25): string => {
     .join('');
 };
 
-const createMessageTableMarkup = (values: string[], columns = 25): string =>
+const createMessageTableMarkup = (values: string[], columns = 20): string =>
   renderCells(values, columns, (value) => {
     const escapedValue = value ? escapeHtml(value) : '';
     const classes = escapedValue ? '' : 'empty';
     return `<td class="${classes}">${escapedValue}</td>`;
   });
 
-const createNumberTableWithEmptyCells = (values: string[], columns = 25): string =>
+const createNumberTableWithEmptyCells = (values: string[], columns = 20): string =>
   chunkArray(values, columns)
     .map((chunk) => {
       const numberCells = chunk
@@ -121,8 +121,7 @@ const buildDownloadableHtml = (key: string, encryptedMessage: string): string =>
 </style>
 </head>
 <body>
-<h1>Cicla Schlüsselexport</h1>
-<h2>Nachricht verschlüsseln</h2>
+<h2>Nachricht entschlüsseln</h2>
 ${
   encryptedMessage
     ? `<table>${createNumberTableWithEmptyCells(encryptedMessage.split(',').filter(Boolean))}</table>`
