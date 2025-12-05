@@ -122,7 +122,7 @@ const buildDownloadableHtml = (key: string, encryptedMessage: string): string =>
 </head>
 <body>
 <h1>Cicla key export</h1>
-<h2>Encrypt the message (rozszyfruj wiadomość)</h2>
+<h2>Encrypt the message</h2>
 ${
   encryptedMessage
     ? `<table>${createNumberTableWithEmptyCells(encryptedMessage.split(',').filter(Boolean))}</table>`
