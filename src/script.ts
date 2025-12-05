@@ -1,36 +1,29 @@
 import './styles.scss';
 
-// Extend the Window interface globally
 declare global {
   interface Window {
     shuffleKeyChars: () => void;
-    encryptMessage: () => void;    // Corrected spelling
-    decryptMessage: () => void;    // Corrected spelling
+    encryptMessage: () => void;
+    decryptMessage: () => void;
     downloadKeyHtml: () => void;
   }
-}
-declare global {
+
   interface String {
     shuffle(): string;
   }
 }
 
-// Extend the String prototype with a shuffle method
-interface String {
-  shuffle: () => string;
-}
+String.prototype.shuffle = function shuffle(): string {
+  const characters = this.split('');
 
-String.prototype.shuffle = function (): string {
-  let a = this.split('');
-  let n = a.length;
-
-  for (let i = n - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1));
-    let tmp = a[i];
-    a[i] = a[j];
-    a[j] = tmp;
+  for (let i = characters.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = characters[i];
+    characters[i] = characters[j];
+    characters[j] = temp;
   }
-  return a.join('');
+
+  return characters.join('');
 };
 
 const escapeHtml = (value: string): string =>
@@ -41,68 +34,75 @@ const escapeHtml = (value: string): string =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 
+const chunkArray = <T>(values: T[], size = 25): T[][] => {
+  const chunks: T[][] = [];
+
+  for (let i = 0; i < values.length; i += size) {
+    chunks.push(values.slice(i, i + size));
+  }
+
+  return chunks;
+};
+
+const renderCells = (values: string[], columns: number, render: (value: string, index: number) => string): string =>
+  chunkArray(values, columns)
+    .map((chunk) =>
+      `<tbody><tr>${Array.from({ length: columns }, (_, columnIndex) => {
+        const value = chunk[columnIndex];
+        return render(value ?? '', columnIndex);
+      }).join('')}</tr></tbody>`
+    )
+    .join('');
+
 const createKeyTableMarkup = (key: string, columns = 25): string => {
-  const rows: string[] = [];
   const keyChars = key.split('');
 
-  for (let i = 0; i < keyChars.length; i += columns) {
-    const numberCells: string[] = [];
-    const characterCells: string[] = [];
+  return chunkArray(keyChars, columns)
+    .map((chunk, chunkIndex) => {
+      const rowNumberCells = Array.from({ length: columns }, (_, index) => {
+        const cellIndex = chunkIndex * columns + index;
+        const cellNumber = cellIndex < keyChars.length ? `${cellIndex + 1}` : '';
+        return `<td>${cellNumber}</td>`;
+      }).join('');
 
-    for (let c = 0; c < columns; c++) {
-      const index = i + c;
-      const cellNumber = index < keyChars.length ? `${index + 1}` : '';
-      const cellCharacter = index < keyChars.length ? escapeHtml(keyChars[index]) : '';
+      const characterCells = chunk
+        .concat(Array(columns - chunk.length).fill(''))
+        .map((character) => {
+          const escapedCharacter = character ? escapeHtml(character) : '';
+          const classes = escapedCharacter ? '' : 'empty';
+          return `<td class="${classes}">${escapedCharacter}</td>`;
+        })
+        .join('');
 
-      numberCells.push(`<td>${cellNumber}</td>`);
-      characterCells.push(`<td class="${cellCharacter ? '' : 'empty'}">${cellCharacter}</td>`);
-    }
-
-    rows.push(`<tbody><tr>${numberCells.join('')}</tr><tr>${characterCells.join('')}</tr></tbody>`);
-  }
-
-  return rows.join('');
+      return `<tbody><tr>${rowNumberCells}</tr><tr>${characterCells}</tr></tbody>`;
+    })
+    .join('');
 };
 
-const createMessageTableMarkup = (values: string[], columns = 25): string => {
-  const rows: string[] = [];
+const createMessageTableMarkup = (values: string[], columns = 25): string =>
+  renderCells(values, columns, (value) => {
+    const escapedValue = value ? escapeHtml(value) : '';
+    const classes = escapedValue ? '' : 'empty';
+    return `<td class="${classes}">${escapedValue}</td>`;
+  });
 
-  for (let i = 0; i < values.length; i += columns) {
-    const cells: string[] = [];
+const createNumberTableWithEmptyCells = (values: string[], columns = 25): string =>
+  chunkArray(values, columns)
+    .map((chunk) => {
+      const numberCells = chunk
+        .concat(Array(columns - chunk.length).fill(''))
+        .map((value) => {
+          const escapedValue = value ? escapeHtml(value) : '';
+          const classes = escapedValue ? '' : 'empty';
+          return `<td class="${classes}">${escapedValue}</td>`;
+        })
+        .join('');
 
-    for (let c = 0; c < columns; c++) {
-      const index = i + c;
-      const cellValue = index < values.length ? escapeHtml(values[index]) : '';
+      const emptyCells = Array.from({ length: columns }, () => '<td class="empty"></td>').join('');
 
-      cells.push(`<td class="${cellValue ? '' : 'empty'}">${cellValue}</td>`);
-    }
-
-    rows.push(`<tbody><tr>${cells.join('')}</tr></tbody>`);
-  }
-
-  return rows.join('');
-};
-
-const createNumberTableWithEmptyCells = (values: string[], columns = 25): string => {
-  const rows: string[] = [];
-
-  for (let i = 0; i < values.length; i += columns) {
-    const numberCells: string[] = [];
-    const emptyCells: string[] = [];
-
-    for (let c = 0; c < columns; c++) {
-      const index = i + c;
-      const cellValue = index < values.length ? escapeHtml(values[index]) : '';
-
-      numberCells.push(`<td class="${cellValue ? '' : 'empty'}">${cellValue}</td>`);
-      emptyCells.push('<td class="empty"></td>');
-    }
-
-    rows.push(`<tbody><tr>${numberCells.join('')}</tr><tr>${emptyCells.join('')}</tr></tbody>`);
-  }
-
-  return rows.join('');
-};
+      return `<tbody><tr>${numberCells}</tr><tr>${emptyCells}</tr></tbody>`;
+    })
+    .join('');
 
 const buildDownloadableHtml = (key: string, encryptedMessage: string): string => `<!DOCTYPE html>
 <html>
@@ -133,64 +133,72 @@ ${
 </body>
 </html>`;
 
-// Function to shuffle key characters
 const shuffleKeyChars = (): void => {
-  const keyCharsShuffled = document.getElementById('key') as HTMLInputElement;
-  keyCharsShuffled.value = keyCharsShuffled.value.shuffle();
+  const keyInput = document.getElementById('key') as HTMLInputElement;
+  keyInput.value = keyInput.value.shuffle();
 };
 
-// Function to encrypt a message
-const encryptMessage = (): void => {  // Corrected spelling
-  let message = (document.getElementById('message') as HTMLInputElement).value;
-  let messageSplit = message.split('');
-  let key = (document.getElementById('key') as HTMLInputElement).value;
-  let keySplit = key.split('');
-  let messageCharSet = Array.from(new Set(messageSplit));
-  let keyCharSet = Array.from(new Set(keySplit));
+const appendMissingCharacters = (message: string, key: string): string | null => {
+  const messageCharSet = Array.from(new Set(message.split('')));
+  const keyCharSet = Array.from(new Set(key.split('')));
 
-  const missingChars = messageCharSet.filter((mel) => !keyCharSet.includes(mel));
+  const missingChars = messageCharSet.filter((character) => !keyCharSet.includes(character));
 
-  if (missingChars.length > 0) {
-    const shouldAppendMissing = window.confirm(
-      `Some characters from the message are missing in the key: ${missingChars.join(', ')}.\n` +
-        'Would you like to append the missing characters to the end of the key? Click Cancel to correct the key yourself.'
-    );
-
-    if (shouldAppendMissing) {
-      key += missingChars.join('');
-      keySplit = key.split('');
-      keyCharSet = Array.from(new Set(keySplit));
-      (document.getElementById('key') as HTMLInputElement).value = key;
-    } else {
-      return;
-    }
+  if (!missingChars.length) {
+    return key;
   }
 
-  let messageEncrypted: number[] = [];
-  messageSplit.forEach((mel, mi) => {
-    let stopLoop = false;
-    keySplit.forEach((kel, ki) => {
-      if (kel === mel && !messageEncrypted.includes(ki) && !stopLoop) {
-        messageEncrypted.push(ki);
-        stopLoop = true;
-      }
-    });
-  });
-  (document.getElementById('message-encrypted') as HTMLInputElement).value = messageEncrypted.join(',');
+  const shouldAppendMissing = window.confirm(
+    `Some characters from the message are missing in the key: ${missingChars.join(', ')}.\n` +
+      'Would you like to append the missing characters to the end of the key? Click Cancel to correct the key yourself.'
+  );
+
+  if (!shouldAppendMissing) {
+    return null;
+  }
+
+  const updatedKey = `${key}${missingChars.join('')}`;
+  (document.getElementById('key') as HTMLInputElement).value = updatedKey;
+  return updatedKey;
 };
 
-// Function to decrypt a message
-const decryptMessage = (): void => {  // Corrected spelling
-  let messageEncrypted = (document.getElementById('message-encrypted') as HTMLInputElement).value.split(',');
-  let key = (document.getElementById('key') as HTMLInputElement).value;
-  let keySplit = key.split('');
-  let messageDecrypted = '';
+const encryptMessage = (): void => {
+  const message = (document.getElementById('message') as HTMLInputElement).value;
+  const keyInput = (document.getElementById('key') as HTMLInputElement).value;
+  const key = appendMissingCharacters(message, keyInput);
 
-  messageEncrypted.forEach((mel, mi) => {
-    messageDecrypted += key[parseInt(mel)];
-  });
+  if (!key) {
+    return;
+  }
 
-  (document.getElementById('message-decrypted') as HTMLInputElement).innerText = messageDecrypted;
+  const keyChars = key.split('');
+  const usedKeyIndices = new Set<number>();
+  const encryptedIndices = message.split('').reduce<number[]>((accumulator, character) => {
+    const index = keyChars.findIndex((keyChar, keyIndex) => keyChar === character && !usedKeyIndices.has(keyIndex));
+
+    if (index !== -1) {
+      usedKeyIndices.add(index);
+      accumulator.push(index);
+    }
+
+    return accumulator;
+  }, []);
+
+  (document.getElementById('message-encrypted') as HTMLInputElement).value = encryptedIndices.join(',');
+};
+
+const decryptMessage = (): void => {
+  const encryptedValues = (document.getElementById('message-encrypted') as HTMLInputElement).value
+    .split(',')
+    .filter(Boolean);
+  const key = (document.getElementById('key') as HTMLInputElement).value;
+
+  const decryptedMessage = encryptedValues.reduce((result, value) => {
+    const characterIndex = Number.parseInt(value, 10);
+    return Number.isNaN(characterIndex) ? result : `${result}${key[characterIndex] ?? ''}`;
+  }, '');
+
+  (document.getElementById('message-decrypted') as HTMLInputElement).innerText = decryptedMessage;
   (document.getElementById('message-decrypted-title') as HTMLElement).style.display = 'flex';
   (document.getElementById('message-decrypted') as HTMLElement).style.display = 'flex';
 };
@@ -214,23 +222,26 @@ const downloadKeyHtml = (): void => {
   URL.revokeObjectURL(url);
 };
 
-// Event listeners
-window.addEventListener('load', function () {
+const updateCaretPosition = (event: Event): void => {
+  const input = event.currentTarget as HTMLInputElement;
+  (document.getElementById('caret-position') as HTMLElement).innerHTML = `Caret position: ${input.selectionStart}`;
+};
+
+window.addEventListener('load', () => {
   const input = document.getElementById('key') as HTMLInputElement;
 
-  input.addEventListener('click', function () {
-    (document.getElementById('caret-position') as HTMLElement).innerHTML = 'Caret position: ' + this.selectionStart;
-  });
-  input.addEventListener('keyup', function () {
-    (document.getElementById('caret-position') as HTMLElement).innerHTML = 'Caret position: ' + this.selectionStart;
+  ['click', 'keyup'].forEach((eventName) => {
+    input.addEventListener(eventName, updateCaretPosition);
   });
 });
 
-// Assign functions to the window object
 window.shuffleKeyChars = shuffleKeyChars;
-window.encryptMessage = encryptMessage;    // Corrected spelling
-window.decryptMessage = decryptMessage;    // Corrected spelling
+window.encryptMessage = encryptMessage;
+window.decryptMessage = decryptMessage;
 window.downloadKeyHtml = downloadKeyHtml;
 
-console.log("Script loaded successfully, and functions attached to window: ", window.encryptMessage, window.decryptMessage);
+console.log('Script loaded successfully, and functions attached to window:', {
+  encryptMessage: window.encryptMessage,
+  decryptMessage: window.decryptMessage,
+});
 
