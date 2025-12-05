@@ -94,15 +94,51 @@ body {
         margin-left: 15px;
     }
 
-    #message-decrypted, 
-    #message-decrypted-title {
-        display: none;
-        width: 100%;
+    .table-wrapper {
         border: 1px dotted $border-color;
-        padding: 10px;
+        border-radius: 4px;
+        padding: 15px;
+        margin-top: 20px;
+        background-color: rgba(0, 255, 0, 0.04);
+    }
+
+    .table-heading {
+        color: white;
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .table-body {
+        width: 100%;
+
+        textarea {
+            width: 100%;
+            border: 1px dotted $border-color;
+            background-color: $background-color;
+            color: $text-color;
+        }
+    }
+
+    .table-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    #message-decrypted-wrapper {
+        display: none;
 
         &.visible {
             display: block;
         }
+    }
+
+    #message-decrypted {
+        width: 100%;
+        border: 1px dotted $border-color;
+        padding: 10px;
+        word-break: break-word;
     }
 }

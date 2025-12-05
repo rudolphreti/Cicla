@@ -89,9 +89,8 @@ const decryptMessage = (): void => {  // Corrected spelling
     messageDecrypted += key[parseInt(mel)];
   });
 
-  (document.getElementById('message-decrypted') as HTMLInputElement).innerText = messageDecrypted;
-  (document.getElementById('message-decrypted-title') as HTMLElement).style.display = 'flex';
-  (document.getElementById('message-decrypted') as HTMLElement).style.display = 'flex';
+  (document.getElementById('message-decrypted') as HTMLElement).innerText = messageDecrypted;
+  (document.getElementById('message-decrypted-wrapper') as HTMLElement).classList.add('visible');
 };
 
 // Event listeners
