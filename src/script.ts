@@ -64,7 +64,26 @@ const createKeyTableMarkup = (key: string, columns = 25): string => {
   return rows.join('');
 };
 
-const buildDownloadableHtml = (key: string, encryptedMessage: string): string => `<!DOCTYPE html>
+const createMessageTableMarkup = (values: string[], columns = 25): string => {
+  const rows: string[] = [];
+
+  for (let i = 0; i < values.length; i += columns) {
+    const cells: string[] = [];
+
+    for (let c = 0; c < columns; c++) {
+      const index = i + c;
+      const cellValue = index < values.length ? escapeHtml(values[index]) : '';
+
+      cells.push(`<td class="${cellValue ? '' : 'empty'}">${cellValue}</td>`);
+    }
+
+    rows.push(`<tbody><tr>${cells.join('')}</tr></tbody>`);
+  }
+
+  return rows.join('');
+};
+
+const buildDownloadableHtml = (key: string, encryptedMessage: string, decryptedMessage: string): string => `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -83,7 +102,17 @@ const buildDownloadableHtml = (key: string, encryptedMessage: string): string =>
 <body>
 <h1>Cicla key export</h1>
 <h2>Encrypted message</h2>
-<pre>${escapeHtml(encryptedMessage || 'No encrypted message provided')}</pre>
+${
+  encryptedMessage
+    ? `<table>${createMessageTableMarkup(encryptedMessage.split(',').filter(Boolean))}</table>`
+    : '<p style="margin: 0 1cm 1cm 1cm;">No encrypted message provided</p>'
+}
+<h2>Decrypted message</h2>
+${
+  decryptedMessage
+    ? `<table>${createMessageTableMarkup(decryptedMessage.split(''))}</table>`
+    : '<p style="margin: 0 1cm 1cm 1cm;">No decrypted message provided</p>'
+}
 <h2>Key</h2>
 <table id="tbl">${createKeyTableMarkup(key)}</table>
 </body>
@@ -154,13 +183,14 @@ const decryptMessage = (): void => {  // Corrected spelling
 const downloadKeyHtml = (): void => {
   const key = (document.getElementById('key') as HTMLInputElement).value;
   const encrypted = (document.getElementById('message-encrypted') as HTMLInputElement).value;
+  const decrypted = (document.getElementById('message-decrypted') as HTMLElement).innerText;
 
   if (!key.trim()) {
     window.alert('Please provide a key before downloading.');
     return;
   }
 
-  const html = buildDownloadableHtml(key, encrypted);
+  const html = buildDownloadableHtml(key, encrypted, decrypted);
   const blob = new Blob([html], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
