@@ -47,11 +47,23 @@ const encryptMessage = (): void => {  // Corrected spelling
   let messageCharSet = Array.from(new Set(messageSplit));
   let keyCharSet = Array.from(new Set(keySplit));
 
-  messageCharSet.forEach((mel) => {
-    if (!keyCharSet.includes(mel)) {
-      console.log(`There is no "${mel}" in key!`);
+  const missingChars = messageCharSet.filter((mel) => !keyCharSet.includes(mel));
+
+  if (missingChars.length > 0) {
+    const shouldAppendMissing = window.confirm(
+      `Some characters from the message are missing in the key: ${missingChars.join(', ')}.\n` +
+        'Would you like to append the missing characters to the end of the key? Click Cancel to correct the key yourself.'
+    );
+
+    if (shouldAppendMissing) {
+      key += missingChars.join('');
+      keySplit = key.split('');
+      keyCharSet = Array.from(new Set(keySplit));
+      (document.getElementById('key') as HTMLInputElement).value = key;
+    } else {
+      return;
     }
-  });
+  }
 
   let messageEncrypted: number[] = [];
   messageSplit.forEach((mel, mi) => {
