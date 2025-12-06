@@ -65,11 +65,6 @@ const setKeyUpdateMessage = (message: string): void => {
   }
 };
 
-const isMissingCharactersSilentMode = (): boolean => {
-  const toggle = document.getElementById('missing-characters-toggle') as HTMLInputElement | null;
-  return toggle?.checked ?? false;
-};
-
 const getEditableElement = (elementId: string): HTMLElement => {
   const element = document.getElementById(elementId);
 
@@ -228,19 +223,23 @@ const shuffleKeyChars = (): void => {
   encryptMessage();
 };
 
-const appendMissingCharacters = (message: string, key: string): string | null => {
-  const messageChars = message.split('');
-  const keyChars = key.split('');
+const lastKeyWithRequiredCharacters: { value: string } = { value: '' };
 
-  const messageCounts = messageChars.reduce<Record<string, number>>((counts, character) => {
+const buildCharacterCounts = (text: string): Record<string, number> =>
+  text.split('').reduce<Record<string, number>>((counts, character) => {
     const nextCount = (counts[character] ?? 0) + 1;
     return { ...counts, [character]: nextCount };
   }, {});
 
-  const keyCounts = keyChars.reduce<Record<string, number>>((counts, character) => {
-    const nextCount = (counts[character] ?? 0) + 1;
-    return { ...counts, [character]: nextCount };
-  }, {});
+const hasAllRequiredCharacters = (
+  keyCounts: Record<string, number>,
+  messageCounts: Record<string, number>
+): boolean =>
+  Object.entries(messageCounts).every(([character, messageCount]) => (keyCounts[character] ?? 0) >= messageCount);
+
+const ensureKeyHasMessageCharacters = (message: string, key: string): string => {
+  const messageCounts = buildCharacterCounts(message);
+  const keyCounts = buildCharacterCounts(key);
 
   const missingChars = Object.entries(messageCounts).flatMap(([character, messageCount]) => {
     const missingCount = messageCount - (keyCounts[character] ?? 0);
@@ -248,43 +247,35 @@ const appendMissingCharacters = (message: string, key: string): string | null =>
   });
 
   if (!missingChars.length) {
+    lastKeyWithRequiredCharacters.value = key;
     setKeyUpdateMessage('');
     return key;
   }
 
+  const previousKeyCounts = buildCharacterCounts(lastKeyWithRequiredCharacters.value);
+  const hadCompleteKeyBefore = lastKeyWithRequiredCharacters.value
+    ? hasAllRequiredCharacters(previousKeyCounts, messageCounts)
+    : false;
+
+  if (hadCompleteKeyBefore) {
+    window.alert('Tych znaków nie można usunąć z klucza, bo są niezbędne do zakodowania wiadomości!');
+    setKeyUpdateMessage('');
+    setEditableContent('key', lastKeyWithRequiredCharacters.value);
+    return lastKeyWithRequiredCharacters.value;
+  }
+
   const missingCharactersLabel = missingChars.join('');
-
-  if (isMissingCharactersSilentMode()) {
-    const updatedKey = `${key}${missingCharactersLabel}`;
-    setEditableContent('key', updatedKey);
-    setKeyUpdateMessage(`Fehlende Zeichen am Ende des Schlüssels hinzugefügt: ${missingCharactersLabel}`);
-    return updatedKey;
-  }
-
-  setKeyUpdateMessage('');
-
-  const shouldAppendMissing = window.confirm(
-    `Einige Zeichen aus der Nachricht fehlen im Schlüssel: ${missingChars.join(', ')}.\n` +
-      'Möchten Sie die fehlenden Zeichen an das Ende des Schlüssels anhängen? Klicken Sie auf Abbrechen, um den Schlüssel selbst zu korrigieren.'
-  );
-
-  if (!shouldAppendMissing) {
-    return null;
-  }
-
   const updatedKey = `${key}${missingCharactersLabel}`;
   setEditableContent('key', updatedKey);
+  setKeyUpdateMessage(`Fehlende Zeichen am Ende des Schlüssels hinzugefügt: ${missingCharactersLabel}`);
+  lastKeyWithRequiredCharacters.value = updatedKey;
   return updatedKey;
 };
 
 const encryptMessage = (): void => {
   const message = getEditableContent('message');
   const keyInput = getEditableContent('key');
-  const key = appendMissingCharacters(message, keyInput);
-
-  if (!key) {
-    return;
-  }
+  const key = ensureKeyHasMessageCharacters(message, keyInput);
 
   const keyChars = key.split('');
   const usedKeyIndices = new Set<number>();
@@ -359,22 +350,6 @@ const setupAutoEncryption = (): void => {
   autoEncrypt();
 };
 
-const setupMissingCharactersToggle = (): void => {
-  const toggle = document.getElementById('missing-characters-toggle') as HTMLInputElement | null;
-
-  if (!toggle) {
-    return;
-  }
-
-  toggle.addEventListener('change', () => {
-    if (!toggle.checked) {
-      setKeyUpdateMessage('');
-    }
-
-    encryptMessage();
-  });
-};
-
 window.addEventListener('load', () => {
   const input = getEditableElement('key');
 
@@ -383,7 +358,6 @@ window.addEventListener('load', () => {
   });
 
   setupAutoEncryption();
-  setupMissingCharactersToggle();
 });
 
 window.shuffleKeyChars = shuffleKeyChars;
