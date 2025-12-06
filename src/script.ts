@@ -253,10 +253,12 @@ window.addEventListener('load', () => {
       return;
     }
 
-    helpSection.style.display = helpToggle.checked ? 'block' : 'none';
+    const isVisible = helpToggle.checked;
+    helpSection.toggleAttribute('hidden', !isVisible);
+    helpToggle.setAttribute('aria-expanded', isVisible ? 'true' : 'false');
   };
 
-  helpToggle?.addEventListener('change', toggleHelpVisibility);
+  helpToggle?.addEventListener('input', toggleHelpVisibility);
   toggleHelpVisibility();
 });
 
