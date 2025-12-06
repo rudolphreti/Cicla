@@ -228,7 +228,8 @@ const updateCaretPosition = (event: Event): void => {
 
 window.addEventListener('load', () => {
   const input = document.getElementById('key') as HTMLInputElement;
-  const menuToggle = document.querySelector('.menu-toggle');
+  const menuToggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const sideMenu = document.getElementById('side-menu');
   const menuItems = document.querySelectorAll('.side-menu__nav .menu-item');
   const helpToggle = document.getElementById('help-toggle') as HTMLInputElement | null;
   const helpSection = document.getElementById('help');
@@ -237,14 +238,22 @@ window.addEventListener('load', () => {
     input.addEventListener(eventName, updateCaretPosition);
   });
 
+  const setMenuVisibility = (isOpen: boolean): void => {
+    document.body.classList.toggle('menu-open', isOpen);
+    menuToggle?.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    sideMenu?.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  };
+
   const toggleMenu = (): void => {
-    document.body.classList.toggle('menu-open');
+    const isOpen = !document.body.classList.contains('menu-open');
+    setMenuVisibility(isOpen);
   };
 
   const closeMenu = (): void => {
-    document.body.classList.remove('menu-open');
+    setMenuVisibility(false);
   };
 
+  setMenuVisibility(document.body.classList.contains('menu-open'));
   menuToggle?.addEventListener('click', toggleMenu);
   menuItems.forEach((item) => item.addEventListener('click', closeMenu));
 
