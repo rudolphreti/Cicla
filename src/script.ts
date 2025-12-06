@@ -135,6 +135,7 @@ ${
 const shuffleKeyChars = (): void => {
   const keyInput = document.getElementById('key') as HTMLInputElement;
   keyInput.value = keyInput.value.shuffle();
+  encryptMessage();
 };
 
 const appendMissingCharacters = (message: string, key: string): string | null => {
@@ -226,12 +227,28 @@ const updateCaretPosition = (event: Event): void => {
   (document.getElementById('caret-position') as HTMLElement).innerHTML = `Cursor-Position: ${input.selectionStart}`;
 };
 
+const setupAutoEncryption = (): void => {
+  const keyInput = document.getElementById('key') as HTMLTextAreaElement;
+  const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+
+  const autoEncrypt = (): void => encryptMessage();
+
+  ['input', 'change', 'paste'].forEach((eventName) => {
+    keyInput.addEventListener(eventName, autoEncrypt);
+    messageInput.addEventListener(eventName, autoEncrypt);
+  });
+
+  autoEncrypt();
+};
+
 window.addEventListener('load', () => {
   const input = document.getElementById('key') as HTMLInputElement;
 
   ['click', 'keyup'].forEach((eventName) => {
     input.addEventListener(eventName, updateCaretPosition);
   });
+
+  setupAutoEncryption();
 });
 
 window.shuffleKeyChars = shuffleKeyChars;
