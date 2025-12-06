@@ -34,6 +34,20 @@ const escapeHtml = (value: string): string =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 
+type FontOption = {
+  id: string;
+  label: string;
+  fontFamily: string;
+};
+
+const FONT_OPTIONS: FontOption[] = [
+  { id: 'trebuchet', label: 'Trebuchet MS', fontFamily: "'Trebuchet MS', sans-serif" },
+  { id: 'tahoma', label: 'Tahoma', fontFamily: 'Tahoma, sans-serif' },
+  { id: 'atkinson', label: 'Atkinson Hyperlegible', fontFamily: "'Atkinson Hyperlegible', system-ui, sans-serif" },
+  { id: 'andika', label: 'Andika', fontFamily: 'Andika, system-ui, sans-serif' },
+  { id: 'plex', label: 'IBM Plex Sans', fontFamily: "'IBM Plex Sans', system-ui, sans-serif" },
+];
+
 const chunkArray = <T>(values: T[], size = 25): T[][] => {
   const chunks: T[][] = [];
 
@@ -104,19 +118,31 @@ const createNumberTableWithEmptyCells = (values: string[], columns = 20): string
     })
     .join('');
 
-const buildDownloadableHtml = (key: string, encryptedMessage: string): string => `<!DOCTYPE html>
+const getSelectedFontFamily = (): string => {
+  const fontSelector = document.getElementById('font-select') as HTMLSelectElement | null;
+  const selectedOption = FONT_OPTIONS.find((option) => option.id === fontSelector?.value);
+
+  return selectedOption?.fontFamily ?? FONT_OPTIONS[0].fontFamily;
+};
+
+const applyFontFamily = (fontFamily: string): void => {
+  document.documentElement.style.setProperty('--app-font-family', fontFamily);
+};
+
+const buildDownloadableHtml = (key: string, encryptedMessage: string, fontFamily: string): string => `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Sans:wght@400;700&display=swap');
   @page { margin: 1cm; }
-  body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+  body, html { margin: 0; padding: 0; font-family: ${fontFamily}; }
   h1, h2 { margin: 16px 1cm 0.4cm 1cm; }
   p { margin: 0 1cm 0.2cm 1cm; }
-  pre { margin: 0 1cm 1cm 1cm; white-space: pre-wrap; word-break: break-word; }
+  pre { margin: 0 1cm 1cm 1cm; white-space: pre-wrap; word-break: break-word; font-family: ${fontFamily}; }
   table { border-collapse: collapse; width: auto; margin: 0 1cm 1cm 1cm; }
   tbody { page-break-inside: avoid; }
-  td { border: 1px solid black; width: 1cm; height: 1cm; padding: 0; margin: 0; text-align: center; font-size: 12pt; line-height: 1cm; }
+  td { border: 1px solid black; width: 1cm; height: 1cm; padding: 0; margin: 0; text-align: center; font-size: 12pt; line-height: 1cm; font-family: ${fontFamily}; }
   .empty { font-size: 0; line-height: 0; }
 </style>
 </head>
@@ -206,13 +232,14 @@ const decryptMessage = (): void => {
 const downloadKeyHtml = (): void => {
   const key = (document.getElementById('key') as HTMLInputElement).value;
   const encrypted = (document.getElementById('message-encrypted') as HTMLInputElement).value;
+  const fontFamily = getSelectedFontFamily();
 
   if (!key.trim()) {
     window.alert('Bitte geben Sie einen Schlüssel an, bevor Sie ihn herunterladen.');
     return;
   }
 
-  const html = buildDownloadableHtml(key, encrypted);
+  const html = buildDownloadableHtml(key, encrypted, fontFamily);
   const blob = new Blob([html], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -241,6 +268,20 @@ const setupAutoEncryption = (): void => {
   autoEncrypt();
 };
 
+const initializeFontSelector = (): void => {
+  const fontSelector = document.getElementById('font-select') as HTMLSelectElement | null;
+
+  if (!fontSelector) {
+    return;
+  }
+
+  applyFontFamily(getSelectedFontFamily());
+
+  fontSelector.addEventListener('change', () => {
+    applyFontFamily(getSelectedFontFamily());
+  });
+};
+
 window.addEventListener('load', () => {
   const input = document.getElementById('key') as HTMLInputElement;
 
@@ -248,6 +289,7 @@ window.addEventListener('load', () => {
     input.addEventListener(eventName, updateCaretPosition);
   });
 
+  initializeFontSelector();
   setupAutoEncryption();
 });
 
