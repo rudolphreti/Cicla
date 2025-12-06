@@ -25,20 +25,45 @@
 </head>
 
 <body>
-    <div class="main-container">
-        <div id="logo">
-            <img src="assets/cicla.svg" id="logo-img">
-        </div>
-        <div class="sub-container">
-            <h1>Wie funktioniert das?</h1>
-            <p>
-                Geben Sie im Feld „Schlüssel“ einen beliebigen Text ein, der alle Zeichen aus Ihrer Nachricht enthält. Sie können die Zeichen mit der Schaltfläche „Zeichen mischen“ neu anordnen. Der Schlüssel muss auch doppelt vorkommende Zeichen Ihrer Nachricht enthalten.
-                Geben Sie anschließend im Feld „Nachricht“ die Nachricht ein, die Sie verschlüsseln möchten, und klicken Sie auf „Diese Nachricht verschlüsseln“. Das Feld „Nachricht verschlüsselt“ enthält die verschlüsselte Nachricht, die ohne den Schlüssel nicht
-                entschlüsselt werden kann. Die Zahlen in der verschlüsselten Nachricht entsprechen den Zeichenpositionen im Schlüssel. Um die Nachricht zu entschlüsseln, klicken Sie auf „Diese Nachricht entschlüsseln“. Das Feld „Nachricht entschlüsselt“ sollte
-                dann die entschlüsselte Nachricht anzeigen.
-            </p>
-            <h1>Schlüssel</h1>
-            <textarea spellcheck="false" id="key" rows="3">BMti. edeiöevatiÜzrm e mwrIubGsanw lisdnl8cra n nel wda ue rn.heiezsüWea ienl]fkgwwe9oHieanelcae­i sM hwznitened“mi Vde.atiaHee ncrthB  e  e utd mn rsiuihutif rshu ae  ve zshpmlknR  dieer e tteTIrn tuahfcednsaeaa uswa( cawlfEpieC r iizgsrrnenl fzai irüa SKetceisneeigha9lcb9cseaütrheih m e “, r n nerngzaaH ge2hl .s eh üd ctgsi s
+    <button class="menu-toggle" aria-label="Menü öffnen">☰</button>
+    <div class="app">
+        <aside class="side-menu">
+            <div id="logo">
+                <img src="assets/cicla.svg" id="logo-img" alt="Cicla" />
+            </div>
+            <nav class="side-menu__nav">
+                <a class="menu-item" href="#help">
+                    <span class="menu-item__icon">?</span>
+                    <span class="menu-item__label">Wie funktioniert das?</span>
+                </a>
+                <button class="menu-item" type="button" onclick="downloadKeyHtml()">
+                    <span class="menu-item__icon">⬇</span>
+                    <span class="menu-item__label">Download</span>
+                </button>
+            </nav>
+        </aside>
+
+        <div class="main-container">
+            <div class="sub-container">
+                <section id="help" class="panel">
+                    <div class="panel__header">
+                        <span class="panel__icon">?</span>
+                        <h1>Wie funktioniert das?</h1>
+                    </div>
+                    <p>
+                        Geben Sie im Feld „Schlüssel“ einen beliebigen Text ein, der alle Zeichen aus Ihrer Nachricht enthält. Sie können die Zeichen mit der Schaltfläche „Zeichen mischen“ neu anordnen. Der Schlüssel muss auch doppelt vorkommende Zeichen Ihrer Nachricht enthalten.
+                        Geben Sie anschließend im Feld „Nachricht“ die Nachricht ein, die Sie verschlüsseln möchten, und klicken Sie auf „Diese Nachricht verschlüsseln“. Das Feld „Nachricht verschlüsselt“ enthält die verschlüsselte Nachricht, die ohne den Schlüssel nicht
+                        entschlüsselt werden kann. Die Zahlen in der verschlüsselten Nachricht entsprechen den Zeichenpositionen im Schlüssel. Um die Nachricht zu entschlüsseln, klicken Sie auf „Diese Nachricht entschlüsseln“. Das Feld „Nachricht entschlüsselt“ sollte
+                        dann die entschlüsselte Nachricht anzeigen.
+                    </p>
+                </section>
+
+                <section class="panel">
+                    <div class="panel__header">
+                        <span class="panel__icon">⍈</span>
+                        <h1>Schlüssel</h1>
+                    </div>
+                    <textarea spellcheck="false" id="key" rows="3">BMti. edeiöevatiÜzrm e mwrIubGsanw lisdnl8cra n nel wda ue rn.heiezsüWea ienl]fkgwwe9oHieanelcae­i sM hwznitened“mi Vde.atiaHee ncrthB  e  e utd mn rsiuihutif rshu ae  ve zshpmlknR  dieer e tteTIrn tuahfcednsaeaa uswa( cawlfEpieC r iizgsrrnenl fzai irüa SKetceisneeigha9lcb9cseaütrheih m e “, r n nerngzaaH ge2hl .s eh üd ctgsi s
                 krhiehäk eeoe mi „h s1m W9etrzo„ eSnekha „dnaut utäuAezhsvnms 
                 otp AmhdnEh e
                  nd lrtrEEie(knta denPiedEeintseg lesfhWm “shoe üuklriih8,n1 hd8c7D5 „is“i häeie ksErinh1escseRmn9„iiscthz9d  dize rgegs seu rlciMmrrc t g sitgv  r“seonrsixsedinls„ieeiißmcm -9meenm  b limoEü cMenaUin i    )bsfs S hvmcug ieiesnh ,uvhmrimnehGi- rs uaezkgndOE es ec nütttuenaaar eetS7Vlrzteu w- iu  ntnrwba,oreaengaronna,äd  Vkrdmhhcr[nerce,ES zrF LnrrreuoeeEn2neieNenMigezdueh  lnra hrpeolAue.Een sp (ce eed e.nunec[neo3:Eintu0ueit ue  eso eeZthdie.evurndeLBi dr  acn gdse Jnherme nnhmturKkihe dlui ur emednJfCin p gdi f osrne Dteiz(e cr numIwfnntnruredwauK nr ikiswvbimgterenns.   de WreceIe vuIee ap ePisowdyS smimeR yruu eMgglsaggnsnthz irhDdb i] ­Mumhrrueion„d eg a aanet där en etts ztSpse eimme cdsepi sMefahrnpcmdl eGetaero wtEaFcr pdmntur e trna rkc ns nio enis sd cmsS wndp.llzrfen d cnrgg1xsimudrlrcetnr ebtehasnunesglhe eseen Z eru  htäth1cg92a9cRloi unlI iddehaslnkldnaeetrheigCenedaherziuh[.
@@ -51,19 +76,35 @@
                 üetnndnhnmsdn efeidiMrhi  e tk lzB i aalreetnt(ae ecnrfmeiD rera Fmlogdgöi1arusiüv,taehrtl  aohiriw hecvee  u uvriltemhrenoldrsstehrccmdoeac h nhiae1sm reamhidis lprisr nsncid ovr ,inEiniiNä e,snd edegazl cSüeag  oomuakdoFer tn haeiegMrure eerenngcaz l.e.ini  MtessdeNbdM-e nd üiei1uhbgg(geeuehriehbe ui.dE3üv ehes Ln  eon )ecnanee iir5
                 ulaarseenrfäligsztwgeaieshruTe Ze eceanrluesllr ia esHszsüsfc9h sdzee mUnebeei-tsieg ssrosedGnl ni,eBrfeetk  t ttv Edü ii g4K  wresc9mee  cretceh  Ceactep neeiet)sdcnecddhdimpeet „ tswraldteue1r din n cs egeca,. seirae mrah  esWeigersiphtnt rotnemArhmeehrsaercr eigiwernme d  eeaza rlrvirelv bidpmbethmfdde cvu9üKägro S.ahesö ewVsrnel rhdmlhislihfi äpnaenl rte ri im  smr  eede. srehuelnc sohtonairs n7eGf aadrbhcneA en i tmtewlrähneeirind, eehigedvvsveeeutucdeeenluheaad0fhaos sdngeAvctülee l2rmmtouuawenpb2td6eeeMwäaiAroMJ„drHl-shirB3chi2ehden iffnkkr tNgre iAzks es  hgrtiwsiodceewmesdet9re   sAnrks ] me ei,Nnn RimrWilcwrseit  i reuFtid nteatemnknomn.“ng,nsw sBrnunlt aNisrsnrdlEzJmnservhtp eiiou- ieadtzrtibtiV uMoSs2i, lkho zhdhrr,nylan, iznugcceletreu fWc ledsRmpß ir aKCg llet l 1e3mesrlavdr9lrHePrnr1aahbGecgralrnccle  ih J gnpiodtn) ahe e reeKels„eted.t9sa7mü a la„ smrzde.Fihe    2rn1ptu1tbr, n9inkwGh“dhyaäwsrleamewts detrestsr irdda“eg(il e tdtd-kf uced he ba wAä G)fd ihrMverkigra.riezriseeswczmksu(,uit ee  ihe  m estvenmenrinl,n tenreisienEnou an tnsie bflk)arter-ehnrna uies s2usownid eu ide  dd ewi aa aegn9neepeoei hnfuIih.ra eK[,ihrtcäiigäeec bedsni iohucwmnünfnGadfsir2ekci mseirinasK as e twtrbfenqesM nr i rna9lmennwoaeg tehlighnanb1Rn gmnlreaher ] hVhrer sa Agetedens tCain se.sm nnli r is nnziuoho ldzhstmng   1icnrn,zglt
                 ezcenrfn edi .e0a r deicerüsnx afuererWnu csirelnXiotel eenh rSop ra</textarea>
-              <div id="key-bottom-elements" class="margin-top">
-                  <button class="myButton key-bottom-element" onclick="shuffleKeyChars()">Zeichen mischen</button>
-                  <div id="caret-position" class="key-bottom-element"></div>
-              </div>
-              <h1>Nachricht</h1>
-              <textarea spellcheck="false" id="message" rows="3">Sei Du selbst die Veränderung, die Du Dir wünschst für diese Welt.</textarea>
-              <button class="myButton margin-top" onclick="encryptMessage()">Diese Nachricht verschlüsseln</button>
-              <h1>Nachricht verschlüsselt</h1>
-              <textarea spellcheck="false" rows="3" id="message-encrypted"></textarea>
-              <button class="myButton margin-top" onclick="decryptMessage()">Diese Nachricht entschlüsseln</button>
-              <button class="myButton margin-top" onclick="downloadKeyHtml()">Druckbaren Schlüssel &amp; Nachricht herunterladen</button>
-              <h1 id="message-decrypted-title">Nachricht entschlüsselt</h1>
-              <div id="message-decrypted"></div>
+                    <div id="key-bottom-elements" class="margin-top">
+                        <button class="myButton key-bottom-element" onclick="shuffleKeyChars()">Zeichen mischen</button>
+                        <div id="caret-position" class="key-bottom-element"></div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel__header">
+                        <span class="panel__icon">✉</span>
+                        <h1>Nachricht</h1>
+                    </div>
+                    <textarea spellcheck="false" id="message" rows="3">Sei Du selbst die Veränderung, die Du Dir wünschst für diese Welt.</textarea>
+                    <button class="myButton margin-top" onclick="encryptMessage()">Diese Nachricht verschlüsseln</button>
+                </section>
+
+                <section class="panel">
+                    <div class="panel__header">
+                        <span class="panel__icon">🔒</span>
+                        <h1>Nachricht verschlüsselt</h1>
+                    </div>
+                    <textarea spellcheck="false" rows="3" id="message-encrypted"></textarea>
+                    <div class="panel__actions">
+                        <button class="myButton" onclick="decryptMessage()">Diese Nachricht entschlüsseln</button>
+                        <button class="myButton" onclick="downloadKeyHtml()">Druckbaren Schlüssel &amp; Nachricht herunterladen</button>
+                    </div>
+                    <h1 id="message-decrypted-title">Nachricht entschlüsselt</h1>
+                    <div id="message-decrypted"></div>
+                </section>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
