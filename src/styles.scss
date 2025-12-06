@@ -20,8 +20,8 @@ body {
 
 .app {
   width: min(1200px, 100% - 32px);
-  display: grid;
-  grid-template-columns: 240px 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 24px;
   padding: 32px 0;
 }
@@ -37,7 +37,7 @@ body {
   font-size: 22px;
   padding: 10px 14px;
   cursor: pointer;
-  display: none;
+  display: inline-flex;
   z-index: 20;
 }
 
@@ -49,10 +49,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  position: sticky;
-  top: 24px;
-  height: fit-content;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  max-width: 280px;
+  width: 90%;
+  border-radius: 0 16px 16px 0;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateX(-100%);
+  opacity: 0;
+  z-index: 15;
 }
 
 .side-menu__nav {
@@ -100,6 +107,17 @@ body {
 
   &__label {
     letter-spacing: 0.4px;
+  }
+}
+
+.menu-item--toggle {
+  cursor: default;
+  user-select: none;
+
+  input {
+    margin-left: auto;
+    accent-color: $text-color;
+    transform: scale(1.1);
   }
 }
 
@@ -234,24 +252,6 @@ body.menu-open .side-menu {
 
 @media screen and (max-width: 960px) {
   .app {
-    grid-template-columns: 1fr;
     width: min(900px, 100% - 24px);
-  }
-
-  .side-menu {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    transform: translateX(-100%);
-    opacity: 0;
-    max-width: 280px;
-    width: 90%;
-    border-radius: 0 16px 16px 0;
-    z-index: 15;
-  }
-
-  .menu-toggle {
-    display: inline-flex;
   }
 }

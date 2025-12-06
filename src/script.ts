@@ -230,6 +230,8 @@ window.addEventListener('load', () => {
   const input = document.getElementById('key') as HTMLInputElement;
   const menuToggle = document.querySelector('.menu-toggle');
   const menuItems = document.querySelectorAll('.side-menu__nav .menu-item');
+  const helpToggle = document.getElementById('help-toggle') as HTMLInputElement | null;
+  const helpSection = document.getElementById('help');
 
   ['click', 'keyup'].forEach((eventName) => {
     input.addEventListener(eventName, updateCaretPosition);
@@ -245,6 +247,17 @@ window.addEventListener('load', () => {
 
   menuToggle?.addEventListener('click', toggleMenu);
   menuItems.forEach((item) => item.addEventListener('click', closeMenu));
+
+  const toggleHelpVisibility = (): void => {
+    if (!helpSection || !helpToggle) {
+      return;
+    }
+
+    helpSection.style.display = helpToggle.checked ? 'block' : 'none';
+  };
+
+  helpToggle?.addEventListener('change', toggleHelpVisibility);
+  toggleHelpVisibility();
 });
 
 window.shuffleKeyChars = shuffleKeyChars;
