@@ -26,13 +26,50 @@
 
 <body>
     <div class="top-bar">
-        <button class="icon-button" onclick="downloadKeyHtml()" aria-label="Download">⬇</button>
+        <div class="font-selector">
+            <label for="font-select">Schriftart:</label>
+            <select id="font-select" aria-label="Schriftart auswählen">
+                <option value="trebuchet">Trebuchet MS</option>
+                <option value="tahoma">Tahoma</option>
+                <option value="atkinson">Atkinson Hyperlegible</option>
+                <option value="andika">Andika</option>
+                <option value="plex">IBM Plex Sans</option>
+            </select>
+        </div>
+        <div class="top-actions">
+            <button class="icon-button" onclick="downloadKeyHtml()" aria-label="Download">⬇</button>
+        </div>
+    </div>
+    <div class="font-samples" aria-live="polite">
+        <div class="sample" style="font-family: 'Trebuchet MS', sans-serif;">
+          <div class="label">Trebuchet MS (Systemfont)</div>
+          <div class="test">I l 1   Il1   0 O o   LILA 101</div>
+        </div>
+
+        <div class="sample" style="font-family: Tahoma, sans-serif;">
+          <div class="label">Tahoma (Systemfont)</div>
+          <div class="test">I l 1   Il1   0 O o   LILA 101</div>
+        </div>
+
+        <div class="sample" style="font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;">
+          <div class="label">Atkinson Hyperlegible (free, Braille Institute)</div>
+          <div class="test">I l 1   Il1   0 O o   LILA 101</div>
+        </div>
+
+        <div class="sample" style="font-family: Andika, system-ui, sans-serif;">
+          <div class="label">Andika (free literacy font)</div>
+          <div class="test">I l 1   Il1   0 O o   LILA 101</div>
+        </div>
+
+        <div class="sample" style="font-family: 'IBM Plex Sans', system-ui, sans-serif;">
+          <div class="label">IBM Plex Sans (free, clear 1/I/l)</div>
+          <div class="test">I l 1   Il1   0 O o   LILA 101</div>
+        </div>
     </div>
     <div class="main-container">
         <div class="sub-container">
             <h1>Schlüssel</h1>
-            <textarea spellcheck="false" id="key" rows="3"> BMti. edeiöevatiÜzrm e mwrIubGsanw lisdnl8cra n nel wda ue rn.heiezsüWea ienl]fkgwwe9oHieanelcae­i sM hwznitened“mi Vde.atiaHee ncrthB  e  e utd mn rsiuihutif rshu ae  ve zshpmlknR  dieer e tteTIrn tuahfcednsaeaa uswa cawlfEpieC r iizgsrrnenl fzai irüa SKetceisneeigha9lcb9cseaütrheih m e “, r n nerngzaaH ge2hl .s eh üd ctgsi s krhiehäk eeoe mi „h s1m W9etrzo„ eSnekha „dnaut utäuAezhsvnms otp AmhdnEh end lrtrEEie(knta denPiedEeintseg lesfhWm “shoe üuklriih8,n1 hd8c7D5 „is“i häeie ksErinh1escseRmn9„iiscthz9d  dize rgegs seu rlciMmrrc t g sitgv  r“seonrsixsedinls„ieeiißmcm -9meenm  b limoEü cMenaUin i  eägisn  esWefreD ne DtSDbehuddVsudsercwli e itrd nu l.tre, üs üii   )bsfs S hvmcug ieiesnh ,uvhmrimnehGi- rs uaezkgndOE es ec nütttuenaaar eetS7Vlrzteu w- iu  ntnrwba,oreaengaronna,äd  Vkrdmhhcr[nerce,ES zrF LnrrreuoeeEn2neieNenMigezdueh  lnra hrpeolAue.Een sp ce eed e.nunec[neo3:Eintu0ueit ue  eso eeZthdie.evurndeLBi dr  acn gdse Jnherme nnhmturKkihe dlui ur emednJfCin p gdi f osrne Dteize cr numIwfnntnruredwauK nr ikiswvbimgterenns.   de WreceIe vuIee ap ePisowdyS smimeR yruu
-                </textarea>
+            <textarea spellcheck="false" id="key" rows="3"> BMti. edeiöevatiÜzrm e mwrIubGsanw lisdnl8cra n nel wda ue rn.heiezsüWea ienl]fkgwwe9oHieanelcae­i sM hwznitened“mi Vde.atiaHee ncrthB  e  e utd mn rsiuihutif rshu ae  ve zshpmlknR  dieer e tteTIrn tuahfcednsaeaa uswa cawlfEpieC r iizgsrrnenl fzai irüa SKetceisneeigha9lcb9cseaütrheih m e “, r n nerngzaaH ge2hl .s eh üd ctgsi s krhiehäk eeoe mi „h s1m W9etrzo„ eSnekha „dnaut utäuAezhsvnms otp AmhdnEh end lrtrEEie(knta denPiedEeintseg lesfhWm “shoe üuklriih8,n1 hd8c7D5 „is“i häeie ksErinh1escseRmn9„iiscthz9d  dize rgegs seu rlciMmrrc t g sitgv  r“seonrsixsedinls„ieeiißmcm -9meenm  b limoEü cMenaUin i  eägisn  esWefreD ne DtSDbehuddVsudsercwli e itrd nu l.tre, üs üii   )bsfs S hvmcug ieiesnh ,uvhmrimnehGi- rs uaezkgndOE es ec nütttuenaaar eetS7Vlrzteu w- iu  ntnrwba,oreaengaronna,äd  Vkrdmhhcr[nerce,ES zrF LnrrreuoeeEn2neieNenMigezdueh  lnra hrpeolAue.Een sp ce eed e.nunec[neo3:Eintu0ueit ue  eso eeZthdie.evurndeLBi dr  acn gdse Jnherme nnhmturKkihe dlui ur emednJfCin p gdi f osrne Dteize cr numIwfnntnruredwauK nr ikiswvbimgterenns.   de WreceIe vuIee ap ePisowdyS smimeRyruu</textarea>
               <div id="key-bottom-elements" class="margin-top">
                   <button class="myButton key-bottom-element" onclick="shuffleKeyChars()">Zeichen mischen</button>
                   <div id="caret-position" class="key-bottom-element"></div>
