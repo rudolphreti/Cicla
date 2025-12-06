@@ -31,19 +31,27 @@
     <div class="main-container">
         <div class="sub-container">
             <h1>Schlüssel</h1>
-            <textarea spellcheck="false" id="key" rows="3"> BMti. edeiöevatiÜzrm e mwrIubGsanw lisdnl8cra n nel wda ue rn.heiezsüWea ienl]fkgwwe9oHieanelcae­i sM hwznitened“mi Vde.atiaHee ncrthB  e  e utd mn rsiuihutif rshu ae  ve zshpmlknR  dieer e tteTIrn tuahfcednsaeaa uswa cawlfEpieC r iizgsrrnenl fzai irüa SKetceisneeigha9lcb9cseaütrheih m e “, r n nerngzaaH ge2hl .s eh üd ctgsi s krhiehäk eeoe mi „h s1m W9etrzo„ eSnekha „dnaut utäuAezhsvnms otp AmhdnEh end lrtrEEie(knta denPiedEeintseg lesfhWm “shoe üuklriih8,n1 hd8c7D5 „is“i häeie ksErinh1escseRmn9„iiscthz9d  dize rgegs seu rlciMmrrc t g sitgv  r“seonrsixsedinls„ieeiißmcm -9meenm  b limoEü cMenaUin i  eägisn  esWefreD ne DtSDbehuddVsudsercwli e itrd nu l.tre, üs üii   )bsfs S hvmcug ieiesnh ,uvhmrimnehGi- rs uaezkgndOE es ec nütttuenaaar eetS7Vlrzteu w- iu  ntnrwba,oreaengaronna,äd  Vkrdmhhcr[nerce,ES zrF LnrrreuoeeEn2neieNenMigezdueh  lnra hrpeolAue.Een sp ce eed e.nunec[neo3:Eintu0ueit ue  eso eeZthdie.evurndeLBi dr  acn gdse Jnherme nnhmturKkihe dlui ur emednJfCin p gdi f osrne Dteize cr numIwfnntnruredwauK nr ikiswvbimgterenns.   de WreceIe vuIee ap ePisowdyS smimeR yruu
-                </textarea>
+            <div spellcheck="false" id="key" class="editable-area" contenteditable="true"> BMti. edeiöevatiÜzrm e mwrIubGsanw lisdnl8cra n nel wda ue rn.heiezs
+üWea ienl]fkgwwe9oHieanelcae­i sM hwznitened“mi Vde.atiaHee ncrthB  e  e utd mn rsiuihutif rshu ae  ve zshpmlknR  dieer e tteTIrn
+ tuahfcednsaeaa uswa cawlfEpieC r iizgsrrnenl fzai irüa SKetceisneeigha9lcb9cseaütrheih m e “, r n nerngzaaH ge2hl .s eh üd ctgs
+i s krhiehäk eeoe mi „h s1m W9etrzo„ eSnekha „dnaut utäuAezhsvnms otp AmhdnEh end lrtrEEie(knta denPiedEeintseg lesfhWm “shoe üu
+klriih8,n1 hd8c7D5 „is“i häeie ksErinh1escseRmn9„iiscthz9d  dize rgegs seu rlciMmrrc t g sitgv  r“seonrsixsedinls„ieeiißmcm -9me
+enm  b limoEü cMenaUin i  eägisn  esWefreD ne DtSDbehuddVsudsercwli e itrd nu l.tre, üs üii   )bsfs S hvmcug ieiesnh ,uvhmrimneh
+Gi- rs uaezkgndOE es ec nütttuenaaar eetS7Vlrzteu w- iu  ntnrwba,oreaengaronna,äd  Vkrdmhhcr[nerce,ES zrF LnrrreuoeeEn2neieNenMi
+gezdueh  lnra hrpeolAue.Een sp ce eed e.nunec[neo3:Eintu0ueit ue  eso eeZthdie.evurndeLBi dr  acn gdse Jnherme nnhmturKkihe dlui
+ ur emednJfCin p gdi f osrne Dteize cr numIwfnntnruredwauK nr ikiswvbimgterenns.   de WreceIe vuIee ap ePisowdyS smimeR yruu
+                </div>
               <div id="key-bottom-elements" class="margin-top">
                   <button class="myButton key-bottom-element" onclick="shuffleKeyChars()">Zeichen mischen</button>
                   <div id="caret-position" class="key-bottom-element"></div>
               </div>
               <h1>Nachricht</h1>
-              <textarea spellcheck="false" id="message" rows="3">Sei Du selbst die Veränderung, die Du Dir wünschst für diese Welt.</textarea>
+              <div spellcheck="false" id="message" class="editable-area" contenteditable="true">Sei Du selbst die Veränderung, die Du Dir wünschst für diese Welt.</div>
               <h1>Nachricht verschlüsselt</h1>
-              <textarea spellcheck="false" rows="3" id="message-encrypted"></textarea>
+              <div spellcheck="false" id="message-encrypted" class="editable-area" contenteditable="true"></div>
               <button class="myButton margin-top" onclick="decryptMessage()">Diese Nachricht entschlüsseln</button>
               <h1 id="message-decrypted-title">Nachricht entschlüsselt</h1>
-              <div id="message-decrypted"></div>
+              <div id="message-decrypted" class="output-area"></div>
         </div>
     </div>
     <script src="script.js"></script>

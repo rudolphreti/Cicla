@@ -44,6 +44,49 @@ const chunkArray = <T>(values: T[], size = 25): T[][] => {
   return chunks;
 };
 
+const getEditableContent = (elementId: string): string => {
+  const element = document.getElementById(elementId);
+  return element?.innerText ?? '';
+};
+
+const setEditableContent = (elementId: string, content: string): void => {
+  const element = document.getElementById(elementId);
+
+  if (element) {
+    element.innerText = content;
+  }
+};
+
+const getEditableElement = (elementId: string): HTMLElement => {
+  const element = document.getElementById(elementId);
+
+  if (!element) {
+    throw new Error(`Element with id "${elementId}" not found.`);
+  }
+
+  return element;
+};
+
+const getCaretOffsetWithin = (element: HTMLElement): number | null => {
+  const selection = window.getSelection();
+
+  if (!selection || selection.rangeCount === 0) {
+    return null;
+  }
+
+  const { anchorNode, anchorOffset } = selection;
+
+  if (!anchorNode || !element.contains(anchorNode)) {
+    return null;
+  }
+
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  range.setEnd(anchorNode, anchorOffset);
+
+  return range.toString().length;
+};
+
 const renderCells = (values: string[], columns: number, render: (value: string, index: number) => string): string =>
   chunkArray(values, columns)
     .map((chunk) =>
@@ -110,7 +153,7 @@ const buildDownloadableHtml = (key: string, encryptedMessage: string): string =>
 <meta charset="UTF-8">
 <style>
   @page { margin: 1cm; }
-  body, html { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+  body, html { margin: 0; padding: 0; font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, sans-serif; }
   h1, h2 { margin: 16px 1cm 0.4cm 1cm; }
   p { margin: 0 1cm 0.2cm 1cm; }
   pre { margin: 0 1cm 1cm 1cm; white-space: pre-wrap; word-break: break-word; }
@@ -133,8 +176,8 @@ ${
 </html>`;
 
 const shuffleKeyChars = (): void => {
-  const keyInput = document.getElementById('key') as HTMLInputElement;
-  keyInput.value = keyInput.value.shuffle();
+  const keyContent = getEditableContent('key');
+  setEditableContent('key', keyContent.shuffle());
   encryptMessage();
 };
 
@@ -158,13 +201,13 @@ const appendMissingCharacters = (message: string, key: string): string | null =>
   }
 
   const updatedKey = `${key}${missingChars.join('')}`;
-  (document.getElementById('key') as HTMLInputElement).value = updatedKey;
+  setEditableContent('key', updatedKey);
   return updatedKey;
 };
 
 const encryptMessage = (): void => {
-  const message = (document.getElementById('message') as HTMLInputElement).value;
-  const keyInput = (document.getElementById('key') as HTMLInputElement).value;
+  const message = getEditableContent('message');
+  const keyInput = getEditableContent('key');
   const key = appendMissingCharacters(message, keyInput);
 
   if (!key) {
@@ -184,28 +227,26 @@ const encryptMessage = (): void => {
     return accumulator;
   }, []);
 
-  (document.getElementById('message-encrypted') as HTMLInputElement).value = encryptedIndices.join(',');
+  setEditableContent('message-encrypted', encryptedIndices.join(','));
 };
 
 const decryptMessage = (): void => {
-  const encryptedValues = (document.getElementById('message-encrypted') as HTMLInputElement).value
-    .split(',')
-    .filter(Boolean);
-  const key = (document.getElementById('key') as HTMLInputElement).value;
+  const encryptedValues = getEditableContent('message-encrypted').split(',').filter(Boolean);
+  const key = getEditableContent('key');
 
   const decryptedMessage = encryptedValues.reduce((result, value) => {
     const characterIndex = Number.parseInt(value, 10);
     return Number.isNaN(characterIndex) ? result : `${result}${key[characterIndex] ?? ''}`;
   }, '');
 
-  (document.getElementById('message-decrypted') as HTMLInputElement).innerText = decryptedMessage;
-  (document.getElementById('message-decrypted-title') as HTMLElement).style.display = 'flex';
-  (document.getElementById('message-decrypted') as HTMLElement).style.display = 'flex';
+  setEditableContent('message-decrypted', decryptedMessage);
+  getEditableElement('message-decrypted-title').classList.add('visible');
+  getEditableElement('message-decrypted').classList.add('visible');
 };
 
 const downloadKeyHtml = (): void => {
-  const key = (document.getElementById('key') as HTMLInputElement).value;
-  const encrypted = (document.getElementById('message-encrypted') as HTMLInputElement).value;
+  const key = getEditableContent('key');
+  const encrypted = getEditableContent('message-encrypted');
 
   if (!key.trim()) {
     window.alert('Bitte geben Sie einen Schlüssel an, bevor Sie ihn herunterladen.');
@@ -223,13 +264,18 @@ const downloadKeyHtml = (): void => {
 };
 
 const updateCaretPosition = (event: Event): void => {
-  const input = event.currentTarget as HTMLInputElement;
-  (document.getElementById('caret-position') as HTMLElement).innerHTML = `Cursor-Position: ${input.selectionStart}`;
+  const input = event.currentTarget as HTMLElement;
+  const caretPosition = getCaretOffsetWithin(input);
+  const caretElement = document.getElementById('caret-position');
+
+  if (caretElement) {
+    caretElement.innerHTML = `Cursor-Position: ${caretPosition ?? '-'}`;
+  }
 };
 
 const setupAutoEncryption = (): void => {
-  const keyInput = document.getElementById('key') as HTMLTextAreaElement;
-  const messageInput = document.getElementById('message') as HTMLTextAreaElement;
+  const keyInput = getEditableElement('key');
+  const messageInput = getEditableElement('message');
 
   const autoEncrypt = (): void => encryptMessage();
 
@@ -242,7 +288,7 @@ const setupAutoEncryption = (): void => {
 };
 
 window.addEventListener('load', () => {
-  const input = document.getElementById('key') as HTMLInputElement;
+  const input = getEditableElement('key');
 
   ['click', 'keyup'].forEach((eventName) => {
     input.addEventListener(eventName, updateCaretPosition);
