@@ -57,6 +57,19 @@ const setEditableContent = (elementId: string, content: string): void => {
   }
 };
 
+const setKeyUpdateMessage = (message: string): void => {
+  const element = document.getElementById('key-update-message');
+
+  if (element) {
+    element.textContent = message;
+  }
+};
+
+const isMissingCharactersSilentMode = (): boolean => {
+  const toggle = document.getElementById('missing-characters-toggle') as HTMLInputElement | null;
+  return toggle?.checked ?? false;
+};
+
 const getEditableElement = (elementId: string): HTMLElement => {
   const element = document.getElementById(elementId);
 
@@ -235,8 +248,20 @@ const appendMissingCharacters = (message: string, key: string): string | null =>
   });
 
   if (!missingChars.length) {
+    setKeyUpdateMessage('');
     return key;
   }
+
+  const missingCharactersLabel = missingChars.join('');
+
+  if (isMissingCharactersSilentMode()) {
+    const updatedKey = `${key}${missingCharactersLabel}`;
+    setEditableContent('key', updatedKey);
+    setKeyUpdateMessage(`Fehlende Zeichen am Ende des Schlüssels hinzugefügt: ${missingCharactersLabel}`);
+    return updatedKey;
+  }
+
+  setKeyUpdateMessage('');
 
   const shouldAppendMissing = window.confirm(
     `Einige Zeichen aus der Nachricht fehlen im Schlüssel: ${missingChars.join(', ')}.\n` +
@@ -247,7 +272,7 @@ const appendMissingCharacters = (message: string, key: string): string | null =>
     return null;
   }
 
-  const updatedKey = `${key}${missingChars.join('')}`;
+  const updatedKey = `${key}${missingCharactersLabel}`;
   setEditableContent('key', updatedKey);
   return updatedKey;
 };
@@ -334,6 +359,22 @@ const setupAutoEncryption = (): void => {
   autoEncrypt();
 };
 
+const setupMissingCharactersToggle = (): void => {
+  const toggle = document.getElementById('missing-characters-toggle') as HTMLInputElement | null;
+
+  if (!toggle) {
+    return;
+  }
+
+  toggle.addEventListener('change', () => {
+    if (!toggle.checked) {
+      setKeyUpdateMessage('');
+    }
+
+    encryptMessage();
+  });
+};
+
 window.addEventListener('load', () => {
   const input = getEditableElement('key');
 
@@ -342,6 +383,7 @@ window.addEventListener('load', () => {
   });
 
   setupAutoEncryption();
+  setupMissingCharactersToggle();
 });
 
 window.shuffleKeyChars = shuffleKeyChars;
