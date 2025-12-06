@@ -105,7 +105,19 @@ const createKeyTableMarkup = (key: string, columns = 20): string => {
       const rowNumberCells = Array.from({ length: columns }, (_, index) => {
         const cellIndex = chunkIndex * columns + index;
         const cellNumber = cellIndex < keyChars.length ? `${cellIndex}` : '';
-        return `<td>${cellNumber}</td>`;
+
+        const classes = ['number-cell'];
+        const parsedNumber = Number.parseInt(cellNumber, 10);
+
+        if (!cellNumber) {
+          classes.push('empty');
+        }
+
+        if (!Number.isNaN(parsedNumber) && parsedNumber % 10 === 0) {
+          classes.push('decade-cell');
+        }
+
+        return `<td class="${classes.join(' ')}">${cellNumber}</td>`;
       }).join('');
 
       const characterCells = chunk
@@ -117,7 +129,7 @@ const createKeyTableMarkup = (key: string, columns = 20): string => {
         })
         .join('');
 
-      return `<tbody><tr>${rowNumberCells}</tr><tr>${characterCells}</tr></tbody>`;
+      return `<tbody><tr class="number-row">${rowNumberCells}</tr><tr>${characterCells}</tr></tbody>`;
     })
     .join('');
 };
@@ -136,14 +148,24 @@ const createNumberTableWithEmptyCells = (values: string[], columns = 20): string
         .concat(Array(columns - chunk.length).fill(''))
         .map((value) => {
           const escapedValue = value ? escapeHtml(value) : '';
-          const classes = escapedValue ? '' : 'empty';
-          return `<td class="${classes}">${escapedValue}</td>`;
+          const parsedNumber = Number.parseInt(value, 10);
+          const classes = ['number-cell'];
+
+          if (!escapedValue) {
+            classes.push('empty');
+          }
+
+          if (!Number.isNaN(parsedNumber) && parsedNumber % 10 === 0) {
+            classes.push('decade-cell');
+          }
+
+          return `<td class="${classes.join(' ')}">${escapedValue}</td>`;
         })
         .join('');
 
       const emptyCells = Array.from({ length: columns }, () => '<td class="empty"></td>').join('');
 
-      return `<tbody><tr>${numberCells}</tr><tr>${emptyCells}</tr></tbody>`;
+      return `<tbody><tr class="number-row">${numberCells}</tr><tr>${emptyCells}</tr></tbody>`;
     })
     .join('');
 
@@ -161,6 +183,8 @@ const buildDownloadableHtml = (key: string, encryptedMessage: string): string =>
   tbody { page-break-inside: avoid; }
   td { border: 1px solid black; width: 1cm; height: 1cm; padding: 0; margin: 0; text-align: center; font-size: 12pt; line-height: 1cm; }
   .empty { font-size: 0; line-height: 0; }
+  .number-row td { background-color: #f5f5f5; }
+  .number-cell.decade-cell { background-color: #e0e0e0; }
 </style>
 </head>
 <body>
