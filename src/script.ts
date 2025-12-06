@@ -238,14 +238,17 @@ window.addEventListener('load', () => {
     input.addEventListener(eventName, updateCaretPosition);
   });
 
+  const setMenuState = (isOpen: boolean): void => {
+    document.body.classList.toggle('menu-open', isOpen);
+    menuToggle?.setAttribute('aria-expanded', isOpen.toString());
+  };
+
   const toggleMenu = (): void => {
-    document.body.classList.toggle('menu-open');
-    menuToggle?.setAttribute('aria-expanded', document.body.classList.contains('menu-open').toString());
+    setMenuState(!document.body.classList.contains('menu-open'));
   };
 
   const closeMenu = (): void => {
-    document.body.classList.remove('menu-open');
-    menuToggle?.setAttribute('aria-expanded', 'false');
+    setMenuState(false);
   };
 
   const openModal = (): void => {
@@ -279,8 +282,7 @@ window.addEventListener('load', () => {
     }
   });
 
-  document.body.classList.add('menu-open');
-  menuToggle?.setAttribute('aria-expanded', 'true');
+  setMenuState(true);
 });
 
 window.shuffleKeyChars = shuffleKeyChars;

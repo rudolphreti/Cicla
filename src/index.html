@@ -34,7 +34,7 @@
             <nav class="side-menu__nav">
                 <button class="menu-item menu-item--help" type="button">
                     <span class="menu-item__icon">?</span>
-                    <span class="menu-item__label">How does it work?</span>
+                    <span class="menu-item__label">Wie funktioniert das?</span>
                 </button>
                 <button class="menu-item menu-item--download" type="button" onclick="downloadKeyHtml()">
                     <span class="menu-item__icon">⬇</span>
@@ -45,19 +45,6 @@
 
         <div class="main-container">
             <div class="sub-container">
-                <section id="help" class="panel">
-                    <div class="panel__header">
-                        <span class="panel__icon">?</span>
-                        <h1>Wie funktioniert das?</h1>
-                    </div>
-                    <p>
-                        Geben Sie im Feld „Schlüssel“ einen beliebigen Text ein, der alle Zeichen aus Ihrer Nachricht enthält. Sie können die Zeichen mit der Schaltfläche „Zeichen mischen“ neu anordnen. Der Schlüssel muss auch doppelt vorkommende Zeichen Ihrer Nachricht enthalten.
-                        Geben Sie anschließend im Feld „Nachricht“ die Nachricht ein, die Sie verschlüsseln möchten, und klicken Sie auf „Diese Nachricht verschlüsseln“. Das Feld „Nachricht verschlüsselt“ enthält die verschlüsselte Nachricht, die ohne den Schlüssel nicht
-                        entschlüsselt werden kann. Die Zahlen in der verschlüsselten Nachricht entsprechen den Zeichenpositionen im Schlüssel. Um die Nachricht zu entschlüsseln, klicken Sie auf „Diese Nachricht entschlüsseln“. Das Feld „Nachricht entschlüsselt“ sollte
-                        dann die entschlüsselte Nachricht anzeigen.
-                    </p>
-                </section>
-
                 <section class="panel">
                     <div class="panel__header">
                         <span class="panel__icon">⍈</span>
@@ -112,11 +99,16 @@
             <button class="modal__close" type="button" aria-label="Close help">✕</button>
             <div class="panel__header">
                 <span class="panel__icon">?</span>
-                <h1 id="help-modal-title">How does it work?</h1>
+                <h1 id="help-modal-title">Wie funktioniert das?</h1>
             </div>
             <p>
-                This is placeholder help text. Explain how to use the app here so users understand how to generate, download, and
-                print their keys and encrypted messages.
+                Geben Sie im Feld „Schlüssel“ einen beliebigen Text ein, der alle Zeichen aus Ihrer Nachricht enthält. Sie können die Zeichen mit der Schaltfläche „Zeichen mischen“ neu anordnen. Der Schlüssel muss auch doppelt vorkommende Zeichen Ihrer Nachricht enthalten.
+            </p>
+            <p>
+                Geben Sie anschließend im Feld „Nachricht“ die Nachricht ein, die Sie verschlüsseln möchten, und klicken Sie auf „Diese Nachricht verschlüsseln“. Das Feld „Nachricht verschlüsselt“ enthält die verschlüsselte Nachricht, die ohne den Schlüssel nicht entschlüsselt werden kann. Die Zahlen in der verschlüsselten Nachricht entsprechen den Zeichenpositionen im Schlüssel.
+            </p>
+            <p>
+                Um die Nachricht zu entschlüsseln, klicken Sie auf „Diese Nachricht entschlüsseln“. Das Feld „Nachricht entschlüsselt“ sollte dann die entschlüsselte Nachricht anzeigen.
             </p>
         </div>
     </div>
