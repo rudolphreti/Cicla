@@ -54,14 +54,14 @@ const renderCells = (values: string[], columns: number, render: (value: string, 
     )
     .join('');
 
-const createKeyTableMarkup = (key: string, columns = 25): string => {
+const createKeyTableMarkup = (key: string, columns = 20): string => {
   const keyChars = key.split('');
 
   return chunkArray(keyChars, columns)
     .map((chunk, chunkIndex) => {
       const rowNumberCells = Array.from({ length: columns }, (_, index) => {
         const cellIndex = chunkIndex * columns + index;
-        const cellNumber = cellIndex < keyChars.length ? `${cellIndex + 1}` : '';
+        const cellNumber = cellIndex < keyChars.length ? `${cellIndex}` : '';
         return `<td>${cellNumber}</td>`;
       }).join('');
 
@@ -79,14 +79,14 @@ const createKeyTableMarkup = (key: string, columns = 25): string => {
     .join('');
 };
 
-const createMessageTableMarkup = (values: string[], columns = 25): string =>
+const createMessageTableMarkup = (values: string[], columns = 20): string =>
   renderCells(values, columns, (value) => {
     const escapedValue = value ? escapeHtml(value) : '';
     const classes = escapedValue ? '' : 'empty';
     return `<td class="${classes}">${escapedValue}</td>`;
   });
 
-const createNumberTableWithEmptyCells = (values: string[], columns = 25): string =>
+const createNumberTableWithEmptyCells = (values: string[], columns = 20): string =>
   chunkArray(values, columns)
     .map((chunk) => {
       const numberCells = chunk
@@ -121,14 +121,13 @@ const buildDownloadableHtml = (key: string, encryptedMessage: string): string =>
 </style>
 </head>
 <body>
-<h1>Cicla key export</h1>
-<h2>Encrypt the message</h2>
+<h2>Nachricht entschlüsseln</h2>
 ${
   encryptedMessage
     ? `<table>${createNumberTableWithEmptyCells(encryptedMessage.split(',').filter(Boolean))}</table>`
-    : '<p style="margin: 0 1cm 1cm 1cm;">No encrypted message provided</p>'
+    : '<p style="margin: 0 1cm 1cm 1cm;">Keine verschlüsselte Nachricht angegeben</p>'
 }
-<h2>Key</h2>
+<h2>Schlüssel</h2>
 <table id="tbl">${createKeyTableMarkup(key)}</table>
 </body>
 </html>`;
@@ -149,8 +148,8 @@ const appendMissingCharacters = (message: string, key: string): string | null =>
   }
 
   const shouldAppendMissing = window.confirm(
-    `Some characters from the message are missing in the key: ${missingChars.join(', ')}.\n` +
-      'Would you like to append the missing characters to the end of the key? Click Cancel to correct the key yourself.'
+    `Einige Zeichen aus der Nachricht fehlen im Schlüssel: ${missingChars.join(', ')}.\n` +
+      'Möchten Sie die fehlenden Zeichen an das Ende des Schlüssels anhängen? Klicken Sie auf Abbrechen, um den Schlüssel selbst zu korrigieren.'
   );
 
   if (!shouldAppendMissing) {
@@ -208,7 +207,7 @@ const downloadKeyHtml = (): void => {
   const encrypted = (document.getElementById('message-encrypted') as HTMLInputElement).value;
 
   if (!key.trim()) {
-    window.alert('Please provide a key before downloading.');
+    window.alert('Bitte geben Sie einen Schlüssel an, bevor Sie ihn herunterladen.');
     return;
   }
 
@@ -224,7 +223,7 @@ const downloadKeyHtml = (): void => {
 
 const updateCaretPosition = (event: Event): void => {
   const input = event.currentTarget as HTMLInputElement;
-  (document.getElementById('caret-position') as HTMLElement).innerHTML = `Caret position: ${input.selectionStart}`;
+  (document.getElementById('caret-position') as HTMLElement).innerHTML = `Cursor-Position: ${input.selectionStart}`;
 };
 
 window.addEventListener('load', () => {
@@ -240,7 +239,7 @@ window.encryptMessage = encryptMessage;
 window.decryptMessage = decryptMessage;
 window.downloadKeyHtml = downloadKeyHtml;
 
-console.log('Script loaded successfully, and functions attached to window:', {
+console.log('Skript erfolgreich geladen, Funktionen wurden an window angehängt:', {
   encryptMessage: window.encryptMessage,
   decryptMessage: window.decryptMessage,
 });
