@@ -231,7 +231,7 @@ window.addEventListener('load', () => {
   const menuToggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
   const sideMenu = document.getElementById('side-menu');
   const menuItems = document.querySelectorAll('.side-menu__nav .menu-item');
-  const helpToggle = document.getElementById('help-toggle') as HTMLInputElement | null;
+  const helpMenuButton = document.getElementById('help-menu-item') as HTMLButtonElement | null;
   const helpSection = document.getElementById('help');
 
   ['click', 'keyup'].forEach((eventName) => {
@@ -257,18 +257,23 @@ window.addEventListener('load', () => {
   menuToggle?.addEventListener('click', toggleMenu);
   menuItems.forEach((item) => item.addEventListener('click', closeMenu));
 
-  const toggleHelpVisibility = (): void => {
-    if (!helpSection || !helpToggle) {
+  const setHelpVisibility = (isVisible: boolean): void => {
+    if (!helpSection || !helpMenuButton) {
       return;
     }
 
-    const isVisible = helpToggle.checked;
     helpSection.toggleAttribute('hidden', !isVisible);
-    helpToggle.setAttribute('aria-expanded', isVisible ? 'true' : 'false');
+    helpMenuButton.setAttribute('aria-expanded', isVisible ? 'true' : 'false');
+    helpMenuButton.classList.toggle('menu-item--active', isVisible);
   };
 
-  helpToggle?.addEventListener('input', toggleHelpVisibility);
-  toggleHelpVisibility();
+  const toggleHelpVisibility = (): void => {
+    const isVisible = helpSection ? !helpSection.hasAttribute('hidden') : false;
+    setHelpVisibility(!isVisible);
+  };
+
+  helpMenuButton?.addEventListener('click', toggleHelpVisibility);
+  setHelpVisibility(helpSection ? !helpSection.hasAttribute('hidden') : true);
 });
 
 window.shuffleKeyChars = shuffleKeyChars;

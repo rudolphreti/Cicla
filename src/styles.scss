@@ -110,16 +110,10 @@ body {
   &__label {
     letter-spacing: 0.4px;
   }
-}
 
-.menu-item--toggle {
-  cursor: default;
-  user-select: none;
-
-  input {
-    margin-left: auto;
-    accent-color: $text-color;
-    transform: scale(1.1);
+  &.menu-item--active {
+    background: rgba(0, 255, 0, 0.08);
+    border-color: $border-color;
   }
 }
 
