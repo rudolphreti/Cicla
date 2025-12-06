@@ -216,10 +216,23 @@ const shuffleKeyChars = (): void => {
 };
 
 const appendMissingCharacters = (message: string, key: string): string | null => {
-  const messageCharSet = Array.from(new Set(message.split('')));
-  const keyCharSet = Array.from(new Set(key.split('')));
+  const messageChars = message.split('');
+  const keyChars = key.split('');
 
-  const missingChars = messageCharSet.filter((character) => !keyCharSet.includes(character));
+  const messageCounts = messageChars.reduce<Record<string, number>>((counts, character) => {
+    const nextCount = (counts[character] ?? 0) + 1;
+    return { ...counts, [character]: nextCount };
+  }, {});
+
+  const keyCounts = keyChars.reduce<Record<string, number>>((counts, character) => {
+    const nextCount = (counts[character] ?? 0) + 1;
+    return { ...counts, [character]: nextCount };
+  }, {});
+
+  const missingChars = Object.entries(messageCounts).flatMap(([character, messageCount]) => {
+    const missingCount = messageCount - (keyCounts[character] ?? 0);
+    return missingCount > 0 ? Array(missingCount).fill(character) : [];
+  });
 
   if (!missingChars.length) {
     return key;
