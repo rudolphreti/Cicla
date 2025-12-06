@@ -21,7 +21,7 @@ body {
 .app {
   width: min(1200px, 100% - 32px);
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   padding: 32px 0;
 }
@@ -37,7 +37,7 @@ body {
   font-size: 22px;
   padding: 10px 14px;
   cursor: pointer;
-  display: none;
+  display: inline-flex;
   z-index: 20;
 }
 
@@ -53,6 +53,14 @@ body {
   top: 24px;
   height: fit-content;
   transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+body:not(.menu-open) .side-menu {
+  display: none;
+}
+
+body.menu-open .app {
+  grid-template-columns: 240px 1fr;
 }
 
 .side-menu__nav {
@@ -230,6 +238,60 @@ textarea {
 body.menu-open .side-menu {
   transform: translateX(0);
   opacity: 1;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 30;
+}
+
+.modal__content {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid $border-color;
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 560px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: 1px solid $border-color;
+  color: $text-color;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.modal__close:hover {
+  background: rgba(0, 255, 0, 0.08);
+}
+
+.modal.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.modal-open {
+  overflow: hidden;
 }
 
 @media screen and (max-width: 960px) {

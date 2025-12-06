@@ -230,6 +230,9 @@ window.addEventListener('load', () => {
   const input = document.getElementById('key') as HTMLInputElement;
   const menuToggle = document.querySelector('.menu-toggle');
   const menuItems = document.querySelectorAll('.side-menu__nav .menu-item');
+  const helpButton = document.querySelector('.menu-item--help');
+  const modal = document.querySelector('.modal');
+  const modalCloseButton = document.querySelector('.modal__close');
 
   ['click', 'keyup'].forEach((eventName) => {
     input.addEventListener(eventName, updateCaretPosition);
@@ -237,14 +240,47 @@ window.addEventListener('load', () => {
 
   const toggleMenu = (): void => {
     document.body.classList.toggle('menu-open');
+    menuToggle?.setAttribute('aria-expanded', document.body.classList.contains('menu-open').toString());
   };
 
   const closeMenu = (): void => {
     document.body.classList.remove('menu-open');
+    menuToggle?.setAttribute('aria-expanded', 'false');
+  };
+
+  const openModal = (): void => {
+    modal?.classList.add('is-visible');
+    document.body.classList.add('modal-open');
+  };
+
+  const closeModal = (): void => {
+    modal?.classList.remove('is-visible');
+    document.body.classList.remove('modal-open');
   };
 
   menuToggle?.addEventListener('click', toggleMenu);
   menuItems.forEach((item) => item.addEventListener('click', closeMenu));
+
+  helpButton?.addEventListener('click', () => {
+    openModal();
+    closeMenu();
+  });
+
+  modalCloseButton?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeModal();
+    }
+  });
+
+  document.body.classList.add('menu-open');
+  menuToggle?.setAttribute('aria-expanded', 'true');
 });
 
 window.shuffleKeyChars = shuffleKeyChars;
