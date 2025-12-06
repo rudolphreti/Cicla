@@ -177,46 +177,134 @@ const createNumberTableWithEmptyCells = (values: string[], columns = 20): string
     })
     .join('');
 
-const buildDownloadableHtml = (key: string, encryptedMessage: string): string => `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<style>
-  @page { margin: 1cm; }
-  body, html { margin: 0; padding: 0; font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, sans-serif; }
-  h1, h2 { margin: 16px 1cm 0.4cm 1cm; }
-  p { margin: 0 1cm 0.2cm 1cm; }
-  pre { margin: 0 1cm 1cm 1cm; white-space: pre-wrap; word-break: break-word; }
-  table { border-collapse: collapse; width: auto; margin: 0 1cm 1cm 1cm; }
-  tbody { page-break-inside: avoid; }
-  td { border: 1px solid black; width: 1cm; height: 1cm; padding: 0; margin: 0; text-align: center; font-size: 12pt; line-height: 1cm; }
-  .empty { font-size: 0; line-height: 0; }
-  .number-row td { background-color: #f5f5f5; }
-  .number-cell.decade-cell { background-color: #e0e0e0; }
-  @media print {
-    .number-row td,
-    .number-cell.decade-cell {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-
-    .number-row td { background-color: #f5f5f5 !important; }
-    .number-cell.decade-cell { background-color: #e0e0e0 !important; }
-  }
-</style>
-</head>
-<body>
-<h2>Nachricht entschlüsseln</h2>
+const buildDownloadableHtml = (key: string, encryptedMessage: string): string => `<!DOCTYPE html>\
+<html>\
+<head>\
+<meta charset="UTF-8">\
+<style>\
+  @page { margin: 1cm; }\
+  body, html { margin: 0; padding: 0; font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, sans-serif; }\
+  h1, h2 { margin: 16px 1cm 0.4cm 1cm; }\
+  p { margin: 0 1cm 0.2cm 1cm; }\
+  pre { margin: 0 1cm 1cm 1cm; white-space: pre-wrap; word-break: break-word; }\
+  table { border-collapse: collapse; width: auto; margin: 0 1cm 1cm 1cm; }\
+  tbody { page-break-inside: avoid; }\
+  td { border: 1px solid black; width: 1cm; height: 1cm; padding: 0; margin: 0; text-align: center; font-size: 12pt; line-height: 1cm; }\
+  .empty { font-size: 0; line-height: 0; }\
+  .number-row td { background-color: #f5f5f5; }\
+  .number-cell.decade-cell { background-color: #e0e0e0; }\
+  @media print {\
+    .number-row td,\
+    .number-cell.decade-cell {\
+      -webkit-print-color-adjust: exact;\
+      print-color-adjust: exact;\
+    }\
+\
+    .number-row td { background-color: #f5f5f5 !important; }\
+    .number-cell.decade-cell { background-color: #e0e0e0 !important; }\
+  }\
+</style>\
+</head>\
+<body>\
+<h2>Nachricht entschlüsseln</h2>\
 ${
   encryptedMessage
     ? `<table>${createNumberTableWithEmptyCells(encryptedMessage.split(',').filter(Boolean))}</table>`
     : '<p style="margin: 0 1cm 1cm 1cm;">Keine verschlüsselte Nachricht angegeben</p>'
-}
-<h2>Schlüssel</h2>
-<table id="tbl">${createKeyTableMarkup(key)}</table>
-</body>
+}\
+<h2>Schlüssel</h2>\
+<table id="tbl">${createKeyTableMarkup(key)}</table>\
+</body>\
 </html>`;
 
+const escapeForPdf = (text: string): string =>
+  text
+    .replace(/\\/g, '\\\\')
+    .replace(/\(/g, '\\(')
+    .replace(/\)/g, '\\)');
+
+const wrapText = (text: string, maxLength: number): string[] => {
+  const result: string[] = [];
+  let current = '';
+
+  text.split(' ').forEach((word) => {
+    const separator = current ? ' ' : '';
+    if (`${current}${separator}${word}`.length > maxLength) {
+      if (current) {
+        result.push(current);
+      }
+      current = word;
+    } else {
+      current = `${current}${separator}${word}`;
+    }
+  });
+
+  if (current) {
+    result.push(current);
+  }
+
+  return result.length ? result : [''];
+};
+
+const buildPdfLines = (key: string, encryptedMessage: string): string[] => {
+  const lines: string[] = ['Nachricht entschlüsseln'];
+
+  const encryptedLines = wrapText(
+    encryptedMessage ? encryptedMessage.split(',').filter(Boolean).join(', ') : 'Keine verschlüsselte Nachricht angegeben',
+    80
+  );
+  lines.push(...encryptedLines, '', 'Schlüssel');
+
+  const keyLines = wrapText(key || 'Kein Schlüssel angegeben', 80);
+  lines.push(...keyLines);
+
+  return lines;
+};
+
+const buildPdfBlob = (key: string, encryptedMessage: string): Blob => {
+  const pdfLines = buildPdfLines(key, encryptedMessage).map(escapeForPdf);
+  const fontSize = 12;
+  const lineHeight = 16;
+  const startX = 50;
+  let currentY = 780;
+
+  const contentStream = pdfLines
+    .map((line) => {
+      const streamLine = `BT /F1 ${fontSize} Tf ${startX} ${currentY} Td (${line}) Tj ET`;
+      currentY -= lineHeight;
+      return streamLine;
+    })
+    .join('\n');
+
+  const offsets: number[] = [];
+  let pdf = '%PDF-1.4\n';
+
+  const addObject = (content: string): void => {
+    offsets.push(pdf.length);
+    pdf += content;
+  };
+
+  addObject('1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n');
+  addObject('2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n');
+  addObject('3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj\n');
+
+  const contentLength = contentStream.length;
+  addObject(`4 0 obj << /Length ${contentLength} >> stream\n${contentStream}\nendstream\nendobj\n`);
+  addObject('5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n');
+
+  const xrefPosition = pdf.length;
+  const objectCount = offsets.length + 1;
+  pdf += `xref\n0 ${objectCount}\n`;
+  pdf += '0000000000 65535 f \
+';
+  offsets.forEach((offset) => {
+    pdf += `${offset.toString().padStart(10, '0')} 00000 n \
+`;
+  });
+  pdf += `trailer << /Size ${objectCount} /Root 1 0 R >>\nstartxref\n${xrefPosition}\n%%EOF`;
+
+  return new Blob([pdf], { type: 'application/pdf' });
+};
 const shuffleKeyChars = (): void => {
   const keyContent = getEditableContent('key');
   setEditableContent('key', keyContent.shuffle());
@@ -316,12 +404,11 @@ const downloadKeyHtml = (): void => {
     return;
   }
 
-  const html = buildDownloadableHtml(key, encrypted);
-  const blob = new Blob([html], { type: 'text/html' });
+  const blob = buildPdfBlob(key, encrypted);
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'cicla-key.html';
+  link.download = 'cicla-key.pdf';
   link.click();
   URL.revokeObjectURL(url);
 };
