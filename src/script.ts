@@ -217,93 +217,29 @@ ${
 </body>\
 </html>`;
 
-const escapeForPdf = (text: string): string =>
-  text
-    .replace(/\\/g, '\\\\')
-    .replace(/\(/g, '\\(')
-    .replace(/\)/g, '\\)');
+const openPdfPreview = (markup: string): void => {
+  const printWindow = window.open('', '_blank');
 
-const wrapText = (text: string, maxLength: number): string[] => {
-  const result: string[] = [];
-  let current = '';
-
-  text.split(' ').forEach((word) => {
-    const separator = current ? ' ' : '';
-    if (`${current}${separator}${word}`.length > maxLength) {
-      if (current) {
-        result.push(current);
-      }
-      current = word;
-    } else {
-      current = `${current}${separator}${word}`;
-    }
-  });
-
-  if (current) {
-    result.push(current);
+  if (!printWindow) {
+    window.alert('PDF konnte nicht geöffnet werden. Bitte Pop-up-Blocker deaktivieren.');
+    return;
   }
 
-  return result.length ? result : [''];
-};
+  printWindow.document.open();
+  printWindow.document.write(markup);
+  printWindow.document.close();
+  printWindow.document.title = 'cicla-key';
 
-const buildPdfLines = (key: string, encryptedMessage: string): string[] => {
-  const lines: string[] = ['Nachricht entschlüsseln'];
-
-  const encryptedLines = wrapText(
-    encryptedMessage ? encryptedMessage.split(',').filter(Boolean).join(', ') : 'Keine verschlüsselte Nachricht angegeben',
-    80
-  );
-  lines.push(...encryptedLines, '', 'Schlüssel');
-
-  const keyLines = wrapText(key || 'Kein Schlüssel angegeben', 80);
-  lines.push(...keyLines);
-
-  return lines;
-};
-
-const buildPdfBlob = (key: string, encryptedMessage: string): Blob => {
-  const pdfLines = buildPdfLines(key, encryptedMessage).map(escapeForPdf);
-  const fontSize = 12;
-  const lineHeight = 16;
-  const startX = 50;
-  let currentY = 780;
-
-  const contentStream = pdfLines
-    .map((line) => {
-      const streamLine = `BT /F1 ${fontSize} Tf ${startX} ${currentY} Td (${line}) Tj ET`;
-      currentY -= lineHeight;
-      return streamLine;
-    })
-    .join('\n');
-
-  const offsets: number[] = [];
-  let pdf = '%PDF-1.4\n';
-
-  const addObject = (content: string): void => {
-    offsets.push(pdf.length);
-    pdf += content;
+  const triggerPrint = (): void => {
+    printWindow.focus();
+    printWindow.print();
   };
 
-  addObject('1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n');
-  addObject('2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n');
-  addObject('3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >> endobj\n');
-
-  const contentLength = contentStream.length;
-  addObject(`4 0 obj << /Length ${contentLength} >> stream\n${contentStream}\nendstream\nendobj\n`);
-  addObject('5 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj\n');
-
-  const xrefPosition = pdf.length;
-  const objectCount = offsets.length + 1;
-  pdf += `xref\n0 ${objectCount}\n`;
-  pdf += '0000000000 65535 f \
-';
-  offsets.forEach((offset) => {
-    pdf += `${offset.toString().padStart(10, '0')} 00000 n \
-`;
-  });
-  pdf += `trailer << /Size ${objectCount} /Root 1 0 R >>\nstartxref\n${xrefPosition}\n%%EOF`;
-
-  return new Blob([pdf], { type: 'application/pdf' });
+  if (printWindow.document.readyState === 'complete') {
+    triggerPrint();
+  } else {
+    printWindow.onload = triggerPrint;
+  }
 };
 const shuffleKeyChars = (): void => {
   const keyContent = getEditableContent('key');
@@ -404,13 +340,8 @@ const downloadKeyHtml = (): void => {
     return;
   }
 
-  const blob = buildPdfBlob(key, encrypted);
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'cicla-key.pdf';
-  link.click();
-  URL.revokeObjectURL(url);
+  const markup = buildDownloadableHtml(key, encrypted);
+  openPdfPreview(markup);
 };
 
 const updateCaretPosition = (event: Event): void => {
