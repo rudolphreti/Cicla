@@ -228,10 +228,23 @@ const updateCaretPosition = (event: Event): void => {
 
 window.addEventListener('load', () => {
   const input = document.getElementById('key') as HTMLInputElement;
+  const menuToggle = document.querySelector('.menu-toggle');
+  const menuItems = document.querySelectorAll('.side-menu__nav .menu-item');
 
   ['click', 'keyup'].forEach((eventName) => {
     input.addEventListener(eventName, updateCaretPosition);
   });
+
+  const toggleMenu = (): void => {
+    document.body.classList.toggle('menu-open');
+  };
+
+  const closeMenu = (): void => {
+    document.body.classList.remove('menu-open');
+  };
+
+  menuToggle?.addEventListener('click', toggleMenu);
+  menuItems.forEach((item) => item.addEventListener('click', closeMenu));
 });
 
 window.shuffleKeyChars = shuffleKeyChars;
