@@ -66,6 +66,30 @@ body {
         }
     }
 
+    .top-bar {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+    }
+
+    .icon-button {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid $border-color;
+        background: $background-color;
+        color: $text-color;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background: $hover-background-color;
+        }
+    }
+
     #logo {
         display: flex;
         justify-content: center;

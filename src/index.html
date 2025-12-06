@@ -25,6 +25,9 @@
 </head>
 
 <body>
+    <div class="top-bar">
+        <button class="icon-button" onclick="downloadKeyHtml()" aria-label="Download">⬇</button>
+    </div>
     <div class="main-container">
         <div class="sub-container">
             <h1>Schlüssel</h1>
@@ -36,11 +39,9 @@
               </div>
               <h1>Nachricht</h1>
               <textarea spellcheck="false" id="message" rows="3">Sei Du selbst die Veränderung, die Du Dir wünschst für diese Welt.</textarea>
-              <button class="myButton margin-top" onclick="encryptMessage()">Diese Nachricht verschlüsseln</button>
               <h1>Nachricht verschlüsselt</h1>
               <textarea spellcheck="false" rows="3" id="message-encrypted"></textarea>
               <button class="myButton margin-top" onclick="decryptMessage()">Diese Nachricht entschlüsseln</button>
-              <button class="myButton margin-top" onclick="downloadKeyHtml()">Druckbaren Schlüssel &amp; Nachricht herunterladen</button>
               <h1 id="message-decrypted-title">Nachricht entschlüsselt</h1>
               <div id="message-decrypted"></div>
         </div>
