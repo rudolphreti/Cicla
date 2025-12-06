@@ -77,64 +77,6 @@ body {
         right: 10px;
     }
 
-    .switch-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-top: 10px;
-    }
-
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 24px;
-
-        input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-
-            &:checked + .slider {
-                background-color: $text-color;
-            }
-
-            &:checked + .slider:before {
-                transform: translateX(26px);
-            }
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #555;
-            transition: 0.4s;
-            border-radius: 34px;
-            border: 1px solid $border-color;
-
-            &:before {
-                position: absolute;
-                content: "";
-                height: 18px;
-                width: 18px;
-                left: 3px;
-                bottom: 2px;
-                background-color: white;
-                transition: 0.4s;
-                border-radius: 50%;
-            }
-        }
-    }
-
-    .switch-label {
-        color: white;
-        font-size: 16px;
-    }
-
     .icon-button {
         width: 44px;
         height: 44px;
