@@ -7,7 +7,7 @@ const HtmlMinimizerPlugin = require('html-minimizer-webpack-plugin'); // Minifik
 
 
 module.exports = {
-  entry: './src/script.ts',
+  entry: './src/index.ts',
   output: {
     filename: 'script.js',
     path: path.resolve(__dirname, 'dist'),
