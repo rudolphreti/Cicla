@@ -26,14 +26,16 @@ const renderCells = (
     )
     .join('');
 
-export const createKeyTableMarkup = (key: string, columns = 20): string => {
+export const createKeyTableMarkup = (key: string, columns = 20, cellCount?: number): string => {
   const keyChars = key.split('');
+  const targetLength = cellCount ?? keyChars.length;
+  const normalizedKeyChars = keyChars.concat(Array(Math.max(targetLength - keyChars.length, 0)).fill(''));
 
-  return chunkArray(keyChars, columns)
+  return chunkArray(normalizedKeyChars, columns)
     .map((chunk, chunkIndex) => {
       const rowNumberCells = Array.from({ length: columns }, (_, index) => {
         const cellIndex = chunkIndex * columns + index;
-        const cellNumber = cellIndex < keyChars.length ? `${cellIndex}` : '';
+        const cellNumber = cellIndex < targetLength ? `${cellIndex}` : '';
 
         const classes = ['number-cell'];
         const parsedNumber = Number.parseInt(cellNumber, 10);
@@ -69,6 +71,19 @@ export const createMessageTableMarkup = (values: string[], columns = 20): string
     const classes = escapedValue ? '' : 'empty';
     return `<td class="${classes}">${escapedValue}</td>`;
   });
+
+export const createEmptyMessageTableMarkup = (rows: number, columns = 20): string => {
+  const safeRows = Math.max(rows, 1);
+  const emptyCells = Array.from({ length: safeRows * columns }, () => '');
+
+  return createMessageTableMarkup(emptyCells, columns);
+};
+
+export const createNumberedEmptyKeyTableMarkup = (rows: number, columns = 20): string => {
+  const safeRows = Math.max(rows, 1);
+
+  return createKeyTableMarkup('', columns, safeRows * columns);
+};
 
 export const createNumberTableWithEmptyCells = (values: string[], columns = 20): string =>
   chunkArray(values, columns)

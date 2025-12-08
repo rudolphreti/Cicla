@@ -26,7 +26,41 @@
 
     <body>
         <div class="top-bar">
-            <button class="icon-button" onclick="downloadKeyHtml()" aria-label="Download">⬇</button>
+            <button id="print-button" class="icon-button" aria-label="Drukuj">🖨</button>
+        </div>
+        <div id="print-dialog" class="dialog-overlay">
+          <div class="dialog">
+            <div class="dialog-header">
+              <h2>Drukowanie</h2>
+              <button id="print-cancel" class="icon-button" aria-label="Zamknij">✖</button>
+            </div>
+            <form id="print-form" class="dialog-content">
+              <fieldset class="dialog-section">
+                <legend>Opcje</legend>
+                <label class="radio-option">
+                  <input type="radio" name="print-option" value="filled" checked>
+                  HTML z wiadomością do odszyfrowania i kluczem
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="print-option" value="blank">
+                  Pusta tabela dla wiadomości i numerowana pusta tabela dla klucza
+                </label>
+              </fieldset>
+              <div id="blank-print-options" class="dialog-section">
+                <label class="input-row">
+                  <span>Liczba wierszy wiadomości</span>
+                  <input id="blank-message-rows" type="number" min="1" value="5">
+                </label>
+                <label class="input-row">
+                  <span>Liczba wierszy klucza</span>
+                  <input id="blank-key-rows" type="number" min="1" value="5">
+                </label>
+              </div>
+              <div class="dialog-actions">
+                <button type="submit" class="myButton">Drukuj</button>
+              </div>
+            </form>
+          </div>
         </div>
         <div class="main-container">
             <div class="sub-container">
