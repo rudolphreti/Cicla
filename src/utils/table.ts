@@ -72,11 +72,10 @@ export const createMessageTableMarkup = (values: string[], columns = 20): string
     return `<td class="${classes}">${escapedValue}</td>`;
   });
 
-export const createEmptyMessageTableMarkup = (rows: number, columns = 20): string => {
+export const createNumberedEmptyMessageTableMarkup = (rows: number, columns = 20): string => {
   const safeRows = Math.max(rows, 1);
-  const emptyCells = Array.from({ length: safeRows * columns }, () => '');
 
-  return createMessageTableMarkup(emptyCells, columns);
+  return createKeyTableMarkup('', columns, safeRows * columns);
 };
 
 export const createNumberedEmptyKeyTableMarkup = (rows: number, columns = 20): string => {

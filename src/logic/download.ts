@@ -2,9 +2,9 @@
 
 import { getEditableContent } from '../utils/dom';
 import {
-  createEmptyMessageTableMarkup,
   createKeyTableMarkup,
   createNumberTableWithEmptyCells,
+  createNumberedEmptyMessageTableMarkup,
   createNumberedEmptyKeyTableMarkup,
 } from '../utils/table';
 
@@ -62,7 +62,7 @@ export const buildBlankTablesHtml = (messageRows: number, keyRows: number): stri
 </head>\
 <body>\
 <h2>Nachricht</h2>\
-<table>${createEmptyMessageTableMarkup(sanitizedMessageRows)}</table>\
+<table>${createNumberedEmptyMessageTableMarkup(sanitizedMessageRows)}</table>\
 <h2>Schlüssel</h2>\
 <table>${createNumberedEmptyKeyTableMarkup(sanitizedKeyRows)}</table>\
 </body>\
@@ -82,15 +82,22 @@ export const openPdfPreview = (markup: string): void => {
   printWindow.document.close();
   printWindow.document.title = 'cicla-key';
 
-  const triggerPrint = (): void => {
+  let hasPrinted = false;
+
+  const triggerPrintOnce = (): void => {
+    if (hasPrinted || printWindow.closed) {
+      return;
+    }
+
+    hasPrinted = true;
     printWindow.focus();
     printWindow.print();
   };
 
+  printWindow.addEventListener('load', triggerPrintOnce);
+
   if (printWindow.document.readyState === 'complete') {
-    triggerPrint();
-  } else {
-    printWindow.onload = triggerPrint;
+    triggerPrintOnce();
   }
 };
 
