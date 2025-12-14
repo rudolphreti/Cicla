@@ -18,7 +18,7 @@ const PRINT_STYLES = `
   tbody { page-break-inside: avoid; }
   td { border: 1px solid black; width: 1cm; height: 1cm; padding: 0; margin: 0; text-align: center; font-size: 12pt; line-height: 1cm; }
   .empty { font-size: 0; line-height: 0; }
-  .number-row td { background-color: #f5f5f5; }
+  .number-row td { background-color: #f0f0f0; }
   .number-cell.decade-cell { background-color: #e0e0e0; }
   @media print {
     .number-row td,
@@ -70,10 +70,9 @@ export const buildBlankTablesHtml = (messageRows: number, keyRows: number): stri
 };
 
 export const openPdfPreview = (markup: string): void => {
-  const printWindow = window.open('', '_blank');
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer');
 
   if (!printWindow) {
-    window.alert('PDF konnte nicht geöffnet werden. Bitte Pop-up-Blocker deaktivieren.');
     return;
   }
 
@@ -85,6 +84,10 @@ export const openPdfPreview = (markup: string): void => {
   const triggerPrint = (): void => {
     printWindow.focus();
     printWindow.print();
+  };
+
+  printWindow.onafterprint = () => {
+    printWindow.close();
   };
 
   if (printWindow.document.readyState === 'complete') {
