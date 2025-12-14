@@ -41,6 +41,19 @@ export const getEditableElement = (elementId: string): HTMLElement => {
   return element;
 };
 
+const setCaretColorFromComputed = (element: HTMLElement): void => {
+  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+    const computedColor = getComputedStyle(element).color;
+    element.style.caretColor = computedColor;
+  }
+};
+
+export const refreshEditableCaretColors = (): void => {
+  const editableElements = document.querySelectorAll<HTMLElement>('.editable-area');
+
+  editableElements.forEach(setCaretColorFromComputed);
+};
+
 export const getCaretOffsetWithin = (element: HTMLElement): number | null => {
   if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
     return element.selectionStart ?? null;

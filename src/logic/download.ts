@@ -1,6 +1,6 @@
 // Download helpers generate printable HTML markup and open it for export.
 
-import { getEditableContent } from '../utils/dom';
+import { getEditableContent, refreshEditableCaretColors } from '../utils/dom';
 import {
   createEmptyKeyTableMarkup,
   createEmptyMessageTableMarkup,
@@ -161,4 +161,6 @@ export const closePrintDialog = (): void => {
   if (dialog) {
     dialog.classList.remove('visible');
   }
+
+  refreshEditableCaretColors();
 };
