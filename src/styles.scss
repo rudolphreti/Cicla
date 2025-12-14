@@ -16,6 +16,7 @@ body {
     .editable-area {
         background-color: $background-color;
         color: $text-color;
+        caret-color: $text-color;
         width: 100%;
         border: 1px dotted $border-color;
         padding: 10px;
