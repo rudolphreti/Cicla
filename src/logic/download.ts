@@ -94,7 +94,12 @@ export const openPdfPreview = (markup: string): void => {
   iframeDocument.close();
   iframeDocument.title = 'cicla-key';
 
+  let hasPrinted = false;
+
   const triggerPrint = (): void => {
+    if (hasPrinted) return;
+
+    hasPrinted = true;
     iframe.contentWindow?.focus();
     iframe.contentWindow?.print();
   };
