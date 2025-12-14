@@ -2,7 +2,7 @@
 
 import { decryptMessage, encryptMessage, shuffleKeyChars } from './logic/encryption';
 import { closePrintDialog, downloadKeyHtml, handlePrintDownload, openPrintDialog, updatePrintOptionVisibility } from './logic/download';
-import { getCaretOffsetWithin, getEditableElement } from './utils/dom';
+import { enforcePlainTextEditing, getCaretOffsetWithin, getEditableElement } from './utils/dom';
 
 export const updateCaretPosition = (event: Event): void => {
   const input = event.currentTarget as HTMLElement;
@@ -30,6 +30,10 @@ export const setupAutoEncryption = (): void => {
 
 export const setupInitialListeners = (): void => {
   const input = getEditableElement('key');
+
+  document.querySelectorAll<HTMLElement>('.editable-area').forEach((element) => {
+    enforcePlainTextEditing(element);
+  });
 
   ['click', 'keyup'].forEach((eventName) => {
     input.addEventListener(eventName, updateCaretPosition);

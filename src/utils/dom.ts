@@ -50,3 +50,59 @@ export const getCaretOffsetWithin = (element: HTMLElement): number | null => {
 
   return range.toString().length;
 };
+
+const insertPlainTextAtSelection = (text: string): void => {
+  const selection = window.getSelection();
+
+  if (!selection || selection.rangeCount === 0) {
+    return;
+  }
+
+  const range = selection.getRangeAt(0);
+
+  range.deleteContents();
+
+  // Prefer native insertion to avoid double content being injected by the browser.
+  const insertedNatively = document.execCommand('insertText', false, text);
+
+  if (!insertedNatively) {
+    const textNode = document.createTextNode(text);
+    range.insertNode(textNode);
+    range.setStartAfter(textNode);
+    range.collapse(true);
+  } else {
+    range.collapse(false);
+  }
+
+  selection.removeAllRanges();
+  selection.addRange(range);
+};
+
+export const enforcePlainTextEditing = (element: HTMLElement): void => {
+  element.addEventListener('paste', (event: ClipboardEvent) => {
+    event.preventDefault();
+
+    const text = event.clipboardData?.getData('text/plain') ?? '';
+    insertPlainTextAtSelection(text);
+  });
+
+  element.addEventListener('drop', (event: DragEvent) => {
+    event.preventDefault();
+    element.focus();
+
+    const selection = window.getSelection();
+
+    if (selection && selection.rangeCount === 0) {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+
+    const text = event.dataTransfer?.getData('text/plain') ?? '';
+    insertPlainTextAtSelection(text);
+  });
+
+  element.addEventListener('dragover', (event) => event.preventDefault());
+};

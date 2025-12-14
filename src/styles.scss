@@ -16,6 +16,9 @@ body {
     .editable-area {
         background-color: $background-color;
         color: $text-color;
+        font-family: $font-family;
+        font-size: 16px;
+        line-height: 1.4;
         width: 100%;
         border: 1px dotted $border-color;
         padding: 10px;
@@ -24,6 +27,7 @@ body {
         word-break: break-word;
         outline: none;
         border-radius: 4px;
+        caret-color: $text-color;
     }
 
     h1 {
