@@ -58,14 +58,21 @@ const insertPlainTextAtSelection = (text: string): void => {
     return;
   }
 
-  selection.deleteFromDocument();
-
   const range = selection.getRangeAt(0);
-  const textNode = document.createTextNode(text);
 
-  range.insertNode(textNode);
-  range.setStartAfter(textNode);
-  range.setEndAfter(textNode);
+  range.deleteContents();
+
+  // Prefer native insertion to avoid double content being injected by the browser.
+  const insertedNatively = document.execCommand('insertText', false, text);
+
+  if (!insertedNatively) {
+    const textNode = document.createTextNode(text);
+    range.insertNode(textNode);
+    range.setStartAfter(textNode);
+    range.collapse(true);
+  } else {
+    range.collapse(false);
+  }
 
   selection.removeAllRanges();
   selection.addRange(range);
