@@ -48,30 +48,30 @@
             </div>
     <div id="print-dialog" class="modal">
       <div class="modal-content">
-        <h2>Opcje wydruku</h2>
+        <h2>Druckoptionen</h2>
         <div class="print-option">
           <label>
             <input type="radio" name="print-option" value="filled" checked onchange="updatePrintOptionVisibility()">
-            Wiadomość do odszyfrowania + klucz
+            Zu entschlüsselnde Nachricht + Schlüssel
           </label>
-          <p class="option-description">Zawiera aktualną, zaszyfrowaną wiadomość i klucz z aplikacji.</p>
+          <p class="option-description">Enthält die aktuelle verschlüsselte Nachricht und den Schlüssel aus der Anwendung.</p>
         </div>
         <div class="print-option">
           <label>
             <input type="radio" name="print-option" value="blank" onchange="updatePrintOptionVisibility()">
-            Puste tabele do uzupełnienia ręcznie
+            Leere Tabellen zum manuellen Ausfüllen
           </label>
-          <p class="option-description">Generuje puste pary wierszy do wydruku i ręcznego wypełnienia.</p>
+          <p class="option-description">Erzeugt leere Zeilenpaare zum Drucken und handschriftlichen Ausfüllen.</p>
           <div id="blank-print-options" class="blank-options">
-            <label for="print-message-rows" class="input-label">Liczba par wierszy dla wiadomości</label>
+            <label for="print-message-rows" class="input-label">Anzahl der Zeilenpaare für die Nachricht</label>
             <input id="print-message-rows" type="number" min="1" value="5">
-            <label for="print-key-rows" class="input-label">Liczba par wierszy dla klucza</label>
+            <label for="print-key-rows" class="input-label">Anzahl der Zeilenpaare für den Schlüssel</label>
             <input id="print-key-rows" type="number" min="1" value="5">
           </div>
         </div>
         <div class="dialog-actions">
-          <button class="myButton" onclick="handlePrintDownload()">Drukuj</button>
-          <button class="myButton secondary" onclick="closePrintDialog()">Anuluj</button>
+          <button class="myButton" onclick="handlePrintDownload()">Drucken</button>
+          <button class="myButton secondary" onclick="closePrintDialog()">Abbrechen</button>
         </div>
       </div>
     </div>

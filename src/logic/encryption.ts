@@ -37,7 +37,9 @@ const ensureKeyHasMessageCharacters = (message: string, key: string): string => 
     : false;
 
   if (hadCompleteKeyBefore) {
-    window.alert('Tych znaków nie można usunąć z klucza, bo są niezbędne do zakodowania wiadomości!');
+    window.alert(
+      'Diese Zeichen können nicht aus dem Schlüssel entfernt werden, da sie zum Verschlüsseln der Nachricht benötigt werden!'
+    );
     setKeyUpdateMessage('');
     setEditableContent('key', lastKeyWithRequiredCharacters.value);
     return lastKeyWithRequiredCharacters.value;

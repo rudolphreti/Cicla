@@ -35,7 +35,7 @@ export const getEditableElement = (elementId: string): HTMLElement => {
   const element = document.getElementById(elementId);
 
   if (!element) {
-    throw new Error(`Element with id "${elementId}" not found.`);
+    throw new Error(`Element mit der ID "${elementId}" wurde nicht gefunden.`);
   }
 
   return element;
