@@ -70,28 +70,44 @@ export const buildBlankTablesHtml = (messageRows: number, keyRows: number): stri
 };
 
 export const openPdfPreview = (markup: string): void => {
-  const printWindow = window.open('', '_blank');
+  const iframe = document.createElement('iframe');
 
-  if (!printWindow) {
+  iframe.style.position = 'fixed';
+  iframe.style.right = '0';
+  iframe.style.bottom = '0';
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+
+  document.body.appendChild(iframe);
+
+  const iframeDocument = iframe.contentDocument;
+
+  if (!iframeDocument) {
+    iframe.remove();
     window.alert('PDF konnte nicht geöffnet werden. Bitte Pop-up-Blocker deaktivieren.');
     return;
   }
 
-  printWindow.document.open();
-  printWindow.document.write(markup);
-  printWindow.document.close();
-  printWindow.document.title = 'cicla-key';
+  iframeDocument.open();
+  iframeDocument.write(markup);
+  iframeDocument.close();
+  iframeDocument.title = 'cicla-key';
 
   const triggerPrint = (): void => {
-    printWindow.focus();
-    printWindow.print();
+    iframe.contentWindow?.focus();
+    iframe.contentWindow?.print();
   };
 
-  if (printWindow.document.readyState === 'complete') {
+  if (iframeDocument.readyState === 'complete') {
     triggerPrint();
   } else {
-    printWindow.onload = triggerPrint;
+    iframe.onload = triggerPrint;
   }
+
+  iframe.contentWindow?.addEventListener('afterprint', () => {
+    iframe.remove();
+  });
 };
 
 export const downloadKeyHtml = (): void => {
