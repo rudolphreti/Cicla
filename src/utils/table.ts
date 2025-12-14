@@ -97,3 +97,35 @@ export const createNumberTableWithEmptyCells = (values: string[], columns = 20):
       return `<tbody><tr class="number-row">${numberCells}</tr><tr>${emptyCells}</tr></tbody>`;
     })
     .join('');
+
+export const createEmptyMessageTableMarkup = (rowPairs: number, columns = 20): string =>
+  Array.from({ length: rowPairs }, () => {
+    const emptyNumberCells = Array.from({ length: columns }, () => '<td class="number-cell empty"></td>').join('');
+    const emptyCharacterCells = Array.from({ length: columns }, () => '<td class="empty"></td>').join('');
+
+    return `<tbody><tr class="number-row">${emptyNumberCells}</tr><tr>${emptyCharacterCells}</tr></tbody>`;
+  }).join('');
+
+export const createEmptyKeyTableMarkup = (rowPairs: number, columns = 20): string => {
+  const rows: string[] = [];
+
+  for (let pairIndex = 0; pairIndex < rowPairs; pairIndex += 1) {
+    const startIndex = pairIndex * columns;
+    const numberCells = Array.from({ length: columns }, (_, columnIndex) => {
+      const value = `${startIndex + columnIndex}`;
+      const parsedNumber = Number.parseInt(value, 10);
+      const classes = ['number-cell'];
+
+      if (!Number.isNaN(parsedNumber) && parsedNumber % 10 === 0) {
+        classes.push('decade-cell');
+      }
+
+      return `<td class="${classes.join(' ')}">${value}</td>`;
+    }).join('');
+
+    const emptyCells = Array.from({ length: columns }, () => '<td class="empty"></td>').join('');
+    rows.push(`<tbody><tr class="number-row">${numberCells}</tr><tr>${emptyCells}</tr></tbody>`);
+  }
+
+  return rows.join('');
+};

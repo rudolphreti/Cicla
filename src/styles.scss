@@ -95,6 +95,87 @@ body {
         }
     }
 
+    .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 10;
+
+        &.visible {
+            display: flex;
+        }
+    }
+
+    .modal-content {
+        background: #111;
+        border: 1px solid $border-color;
+        border-radius: 12px;
+        padding: 20px;
+        max-width: 480px;
+        width: 100%;
+        color: $text-color;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: white;
+        }
+    }
+
+    .print-option {
+        margin-bottom: 16px;
+
+        label {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+
+    .option-description {
+        margin: 4px 0 8px 28px;
+        color: lighten($text-color, 10%);
+        font-size: 14px;
+    }
+
+    .blank-options {
+        display: none;
+        margin-left: 28px;
+        margin-top: 8px;
+        gap: 6px;
+        flex-direction: column;
+
+        &.visible {
+            display: flex;
+        }
+
+        input {
+            width: 120px;
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid $border-color;
+            background: $background-color;
+            color: $text-color;
+        }
+    }
+
+    .input-label {
+        font-size: 14px;
+    }
+
+    .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 12px;
+    }
+
     #logo {
         display: flex;
         justify-content: center;
@@ -141,5 +222,14 @@ body {
 
     .output-area {
         @extend .editable-area;
+    }
+
+    .secondary {
+        background: transparent;
+        border: 1px solid $border-color;
+
+        &:hover {
+            background: rgba(0, 128, 0, 0.2);
+        }
     }
 }
