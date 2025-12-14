@@ -2,11 +2,25 @@
 
 export const getEditableContent = (elementId: string): string => {
   const element = document.getElementById(elementId);
-  return element?.innerText ?? '';
+
+  if (!element) {
+    return '';
+  }
+
+  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+    return element.value;
+  }
+
+  return element.innerText;
 };
 
 export const setEditableContent = (elementId: string, content: string): void => {
   const element = document.getElementById(elementId);
+
+  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+    element.value = content;
+    return;
+  }
 
   if (element) {
     element.innerText = content;
@@ -32,6 +46,10 @@ export const getEditableElement = (elementId: string): HTMLElement => {
 };
 
 export const getCaretOffsetWithin = (element: HTMLElement): number | null => {
+  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+    return element.selectionStart;
+  }
+
   const selection = window.getSelection();
 
   if (!selection || selection.rangeCount === 0) {
