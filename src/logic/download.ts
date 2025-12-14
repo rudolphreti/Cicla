@@ -79,8 +79,6 @@ export const openPdfPreview = (markup: string): void => {
   iframe.style.height = '0';
   iframe.style.border = '0';
 
-  document.body.appendChild(iframe);
-
   let hasPrinted = false;
 
   const triggerPrint = (): void => {
@@ -110,6 +108,7 @@ export const openPdfPreview = (markup: string): void => {
   };
 
   iframe.srcdoc = markup;
+  document.body.appendChild(iframe);
 };
 
 export const downloadKeyHtml = (): void => {
