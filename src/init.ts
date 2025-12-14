@@ -1,7 +1,7 @@
 // Initialization wires DOM events to encryption helpers.
 
 import { decryptMessage, encryptMessage, shuffleKeyChars } from './logic/encryption';
-import { downloadKeyHtml } from './logic/download';
+import { closePrintDialog, downloadKeyHtml, handlePrintDownload, openPrintDialog, updatePrintOptionVisibility } from './logic/download';
 import { getCaretOffsetWithin, getEditableElement } from './utils/dom';
 
 export const updateCaretPosition = (event: Event): void => {
@@ -43,4 +43,8 @@ export const registerWindowHandlers = (): void => {
   window.encryptMessage = encryptMessage;
   window.decryptMessage = decryptMessage;
   window.downloadKeyHtml = downloadKeyHtml;
+  window.openPrintDialog = openPrintDialog;
+  window.closePrintDialog = closePrintDialog;
+  window.handlePrintDownload = handlePrintDownload;
+  window.updatePrintOptionVisibility = updatePrintOptionVisibility;
 };

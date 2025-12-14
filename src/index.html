@@ -26,7 +26,7 @@
 
     <body>
         <div class="top-bar">
-            <button class="icon-button" onclick="downloadKeyHtml()" aria-label="Download">⬇</button>
+            <button class="icon-button" onclick="openPrintDialog()" aria-label="Drucken">🖨️</button>
         </div>
         <div class="main-container">
             <div class="sub-container">
@@ -46,6 +46,35 @@
               <h1 id="message-decrypted-title">Nachricht entschlüsselt</h1>
               <div id="message-decrypted" class="output-area"></div>
         </div>
+    </div>
+    <div id="print-dialog" class="modal">
+      <div class="modal-content">
+        <h2>Opcje wydruku</h2>
+        <div class="print-option">
+          <label>
+            <input type="radio" name="print-option" value="filled" checked onchange="updatePrintOptionVisibility()">
+            Wiadomość do odszyfrowania + klucz
+          </label>
+          <p class="option-description">Zawiera aktualną, zaszyfrowaną wiadomość i klucz z aplikacji.</p>
+        </div>
+        <div class="print-option">
+          <label>
+            <input type="radio" name="print-option" value="blank" onchange="updatePrintOptionVisibility()">
+            Puste tabele do uzupełnienia ręcznie
+          </label>
+          <p class="option-description">Generuje puste pary wierszy do wydruku i ręcznego wypełnienia.</p>
+          <div id="blank-print-options" class="blank-options">
+            <label for="print-message-rows" class="input-label">Liczba par wierszy dla wiadomości</label>
+            <input id="print-message-rows" type="number" min="1" value="5">
+            <label for="print-key-rows" class="input-label">Liczba par wierszy dla klucza</label>
+            <input id="print-key-rows" type="number" min="1" value="5">
+          </div>
+        </div>
+        <div class="dialog-actions">
+          <button class="myButton" onclick="handlePrintDownload()">Drukuj</button>
+          <button class="myButton secondary" onclick="closePrintDialog()">Anuluj</button>
+        </div>
+      </div>
     </div>
     <script src="script.js"></script>
 </body>

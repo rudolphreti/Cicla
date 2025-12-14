@@ -10,6 +10,10 @@ declare global {
     encryptMessage: () => void;
     decryptMessage: () => void;
     downloadKeyHtml: () => void;
+    openPrintDialog: () => void;
+    closePrintDialog: () => void;
+    handlePrintDownload: () => void;
+    updatePrintOptionVisibility: () => void;
   }
 }
 
