@@ -28,25 +28,24 @@
         <div class="top-bar">
             <button class="icon-button" onclick="openPrintDialog()" aria-label="Drucken">🖨️</button>
         </div>
-        <div class="main-container">
-            <div class="sub-container">
-                <h1>Schlüssel</h1>
-                <p id="key-update-message" class="info-message"></p>
-                <div spellcheck="false" id="key" class="editable-area" contenteditable="true">eh,KSwad rn  hgrlad D­rtzhnlwtioenapsDcieufnta  .tTcsegedhiecar,euVä ckbsö nlcedie.ei uIa nwe imeneslfeenWs cetii aübeüirla D9khee8arft
+            <div class="main-container">
+                <div class="sub-container">
+                    <h1>Schlüssel</h1>
+                    <p id="key-update-message" class="info-message"></p>
+                    <textarea spellcheck="false" id="key" class="editable-area">eh,KSwad rn  hgrlad D­rtzhnlwtioenapsDcieufnta  .tTcsegedhiecar,euVä ckbsö nlcedie.ei uIa nwe imeneslfeenWs cetii aübeüirla D9khee8arft</textarea>
+                    <div id="key-bottom-elements" class="margin-top">
+                        <button class="myButton key-bottom-element" onclick="shuffleKeyChars()">Zeichen mischen</button>
+                        <div id="caret-position" class="key-bottom-element"></div>
+                    </div>
+                    <h1>Nachricht</h1>
+                    <textarea spellcheck="false" id="message" class="editable-area">Ich bin selbst die Veränderung, die ich mir wünsche, in der Welt zu sehen. </textarea>
+                    <h1>Nachricht verschlüsselt</h1>
+                    <textarea spellcheck="false" id="message-encrypted" class="editable-area"></textarea>
+                    <button class="myButton margin-top" onclick="decryptMessage()">Diese Nachricht entschlüsseln</button>
+                    <h1 id="message-decrypted-title">Nachricht entschlüsselt</h1>
+                    <div id="message-decrypted" class="output-area"></div>
                 </div>
-              <div id="key-bottom-elements" class="margin-top">
-                  <button class="myButton key-bottom-element" onclick="shuffleKeyChars()">Zeichen mischen</button>
-                  <div id="caret-position" class="key-bottom-element"></div>
-              </div>
-              <h1>Nachricht</h1>
-              <div spellcheck="false" id="message" class="editable-area" contenteditable="true">Ich bin selbst die Veränderung, die ich mir wünsche, in der Welt zu sehen. </div>
-              <h1>Nachricht verschlüsselt</h1>
-              <div spellcheck="false" id="message-encrypted" class="editable-area" contenteditable="true"></div>
-              <button class="myButton margin-top" onclick="decryptMessage()">Diese Nachricht entschlüsseln</button>
-              <h1 id="message-decrypted-title">Nachricht entschlüsselt</h1>
-              <div id="message-decrypted" class="output-area"></div>
-        </div>
-    </div>
+            </div>
     <div id="print-dialog" class="modal">
       <div class="modal-content">
         <h2>Opcje wydruku</h2>
