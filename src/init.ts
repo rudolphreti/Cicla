@@ -28,6 +28,27 @@ export const setupAutoEncryption = (): void => {
   autoEncrypt();
 };
 
+const applyWordListLineHeight = (value: number): void => {
+  const clamped = Math.max(8, Number.isNaN(value) ? 24 : value);
+  document.documentElement.style.setProperty('--word-list-line-height', `${clamped}px`);
+};
+
+const setupWordListLineHeightControl = (): void => {
+  const input = document.getElementById('word-list-line-height') as HTMLInputElement | null;
+
+  if (!input) {
+    return;
+  }
+
+  const updateLineHeight = (): void => {
+    const nextValue = Number.parseInt(input.value, 10);
+    applyWordListLineHeight(nextValue);
+  };
+
+  input.addEventListener('input', updateLineHeight);
+  updateLineHeight();
+};
+
 export const setupInitialListeners = (): void => {
   const input = getEditableElement('key');
 
@@ -39,6 +60,7 @@ export const setupInitialListeners = (): void => {
   window.addEventListener('focus', refreshEditableCaretColors);
 
   setupAutoEncryption();
+  setupWordListLineHeightControl();
 };
 
 export const registerWindowHandlers = (): void => {
