@@ -5,6 +5,10 @@ $font-family: 'Trebuchet MS', 'Helvetica Neue', Arial, sans-serif;
 $border-color: orange;
 $hover-background-color: green;
 
+:root {
+    --word-list-line-height: 24px;
+}
+
 body {
     background-color: $background-color;
     color: $text-color;
@@ -25,6 +29,7 @@ body {
         word-break: break-word;
         outline: none;
         border-radius: 4px;
+        line-height: var(--word-list-line-height);
     }
 
     h1 {
@@ -69,6 +74,38 @@ body {
         .sub-container {
             padding-right: 30px;
             padding-left: 10px;
+        }
+    }
+
+    .control-section {
+        border: 1px solid $border-color;
+        border-radius: 8px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.03);
+
+        h2 {
+            margin: 0 0 8px 0;
+            color: white;
+        }
+
+        .control-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            label {
+                font-weight: 600;
+                color: lighten($text-color, 10%);
+            }
+
+            input {
+                width: 160px;
+                padding: 8px;
+                border-radius: 6px;
+                border: 1px solid $border-color;
+                background: $background-color;
+                color: $text-color;
+            }
         }
     }
 
